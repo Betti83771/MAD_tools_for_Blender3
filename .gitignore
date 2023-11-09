@@ -1,0 +1,5 @@
+\.vscode/
+__pycache__/
+BlenderBoneMerger/
+\readme.txt
+*updater/
