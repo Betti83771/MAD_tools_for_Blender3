@@ -1,6 +1,6 @@
 import bpy
 from .ExtraSettingComp import *
-from .misc_operators import rename_all_paths_with_filename_2
+from .deps.relocate_library_path import rename_all_paths_with_filename_2
 
 
 
