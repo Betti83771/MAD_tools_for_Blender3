@@ -253,10 +253,10 @@ class IsoaPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         row = layout.row()
-        if context.space_data.edit_tree.nodes.active:
-            label = f"Active node: {context.space_data.edit_tree.nodes.active.name}"
-        else:
-            label = ""
+        label = ""
+        if context.space_data.edit_tree:
+            if context.space_data.edit_tree.nodes.active:
+                label = f"Active node: {context.space_data.edit_tree.nodes.active.name}"
         row.label(text=label)
         row = layout.row()
         row.prop(context.window_manager, 'fw_isoa_rigtarget', text='', icon='OUTLINER_OB_ARMATURE')
