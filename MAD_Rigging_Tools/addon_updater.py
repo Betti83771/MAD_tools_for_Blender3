@@ -687,6 +687,7 @@ class SingletonUpdater:
             'User-Agent', "Python/" + str(platform.python_version()))
 
         # Run the request.
+        print(request.full_url)
         try:
             if context:
                 result = urllib.request.urlopen(request, context=context)

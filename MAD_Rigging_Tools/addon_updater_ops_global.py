@@ -72,7 +72,7 @@ except Exception as e:
 # not match and have errors. Must be all lowercase and no spaces! Should also
 # be unique among any other addons that could exist (using this updater code),
 # to avoid clashes in operator registration.
-updater.addon = "mad_rigging_tools"
+updater.addon = "mad_tools"
 
 
 # -----------------------------------------------------------------------------
@@ -255,11 +255,11 @@ class AddonUpdaterCheckNow(bpy.types.Operator):
             return {'CANCELLED'}
 
         updater.set_check_interval(
-            enabled=settings.auto_check_update,
-            months=settings.updater_interval_months,
-            days=settings.updater_interval_days,
-            hours=settings.updater_interval_hours,
-            minutes=settings.updater_interval_minutes)
+            enabled=settings.auto_check_update_global,
+            months=settings.updater_interval_months_global,
+            days=settings.updater_interval_days_global,
+            hours=settings.updater_interval_hours_global,
+            minutes=settings.updater_interval_minutes_global)
 
         # Input is an optional callback function. This function should take a
         # bool input. If true: update ready, if false: no update ready.
@@ -791,11 +791,11 @@ def check_for_update_background():
     settings = get_user_preferences(bpy.context)
     if not settings:
         return
-    updater.set_check_interval(enabled=settings.auto_check_update,
-                               months=settings.updater_interval_months,
-                               days=settings.updater_interval_days,
-                               hours=settings.updater_interval_hours,
-                               minutes=settings.updater_interval_minutes)
+    updater.set_check_interval(enabled=settings.auto_check_update_global,
+                               months=settings.updater_interval_months_global,
+                               days=settings.updater_interval_days_global,
+                               hours=settings.updater_interval_hours_global,
+                               minutes=settings.updater_interval_minutes_global)
 
     # Input is an optional callback function. This function should take a bool
     # input, if true: update ready, if false: no update ready.
@@ -816,11 +816,11 @@ def check_for_update_nonthreaded(self, context):
             print("Could not get {} preferences, update check skipped".format(
                 __package__))
         return
-    updater.set_check_interval(enabled=settings.auto_check_update,
-                               months=settings.updater_interval_months,
-                               days=settings.updater_interval_days,
-                               hours=settings.updater_interval_hours,
-                               minutes=settings.updater_interval_minutes)
+    updater.set_check_interval(enabled=settings.auto_check_update_global,
+                               months=settings.updater_interval_months_global,
+                               days=settings.updater_interval_days_global,
+                               hours=settings.updater_interval_hours_global,
+                               minutes=settings.updater_interval_minutes_global)
 
     (update_ready, version, link) = updater.check_for_update(now=False)
     if update_ready:
@@ -978,24 +978,24 @@ def update_settings_ui(self, context, element=None):
 
     split = layout_split(row, factor=0.4)
     sub_col = split.column()
-    sub_col.prop(settings, "auto_check_update")
+    sub_col.prop(settings, "auto_check_update_global")
     sub_col = split.column()
 
-    if not settings.auto_check_update:
+    if not settings.auto_check_update_global:
         sub_col.enabled = False
     sub_row = sub_col.row()
     sub_row.label(text="Interval between checks")
     sub_row = sub_col.row(align=True)
     check_col = sub_row.column(align=True)
-    check_col.prop(settings, "updater_interval_months")
+    check_col.prop(settings, "updater_interval_months_global")
     check_col = sub_row.column(align=True)
-    check_col.prop(settings, "updater_interval_days")
+    check_col.prop(settings, "updater_interval_days_global")
     check_col = sub_row.column(align=True)
 
     # Consider un-commenting for local dev (e.g. to set shorter intervals)
-    # check_col.prop(settings,"updater_interval_hours")
+    # check_col.prop(settings,"updater_interval_hours_global")
     # check_col = sub_row.column(align=True)
-    # check_col.prop(settings,"updater_interval_minutes")
+    # check_col.prop(settings,"updater_interval_minutes_global")
 
     # Checking / managing updates.
     row = box.row()
@@ -1219,7 +1219,7 @@ def update_settings_ui_condensed(self, context, element=None):
                        text="", icon="FILE_REFRESH")
 
     row = element.row()
-    row.prop(settings, "auto_check_update")
+    row.prop(settings, "auto_check_update_global")
 
     row = element.row()
     row.scale_y = 0.7
@@ -1362,12 +1362,12 @@ def addon_update_register(bl_info):
     # updater.addon = # define at top of module, MUST be done first
 
     # Website for manual addon download, optional but recommended to set.
-    updater.website = "https://github.com/Betti83771/MAD_tools_for_Blender3/tree/main/MAD_Rigging_Tools"
+    updater.website = "https://github.com/Betti83771/MAD_tools_for_Blender3"
 
     # Addon subfolder path.
     # "sample/path/to/addon"
     # default is "" or None, meaning root
-    updater.subfolder_path = "/MAD_Rigging_Tools"
+    updater.subfolder_path = ""
 
     # Used to check/compare versions.
     updater.current_version = bl_info["version"]
