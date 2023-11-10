@@ -22,16 +22,23 @@ Implements draw calls, popups, and operators that use the addon_updater.
 """
 
 import os
+import sys
 import traceback
+import importlib
 
 import bpy
 from bpy.app.handlers import persistent
+
+# This is the global updater to update all the MAD Tools modules with 1 click.
+# List of MAD Tools modules to update.
+MAD_TOOLS_MODULES = ('MAD_Animation_Tools', 'MAD_File_Construction_Tools',
+                    'MAD_General_Utilities',  'MAD_Rigging_Tools')
 
 # Safely import the updater.
 # Prevents popups for users with invalid python installs e.g. missing libraries
 # and will replace with a fake class instead if it fails (so UI draws work).
 try:
-    from .addon_updater import Updater as updater
+    from .addon_updater import UpdaterGlobal as updater
 except Exception as e:
     print("ERROR INITIALIZING UPDATER")
     print(str(e))
@@ -207,16 +214,29 @@ class AddonUpdaterInstallPopup(bpy.types.Operator):
                 updater.ignore_update()
                 return {'FINISHED'}
 
-            res = updater.run_update(force=False,
+            #res = updater.run_update(force=False,
+            #                         callback=post_update_callback,
+            #                         clean=self.clean_install)
+            current_dir = os.path.dirname(__file__)
+            parent_dir = os.path.dirname(current_dir)
+            print(parent_dir)
+            sys.path.append(parent_dir)
+            for mad_module in MAD_TOOLS_MODULES:
+                if mad_module not in os.listdir(parent_dir):
+                    continue
+                imported_mod = importlib.import_module(mad_module + ".addon_updater_ops")
+                imported_init_bl_info = importlib.import_module(mad_module).bl_info
+                imported_mod.addon_update_register(imported_init_bl_info)
+                res = updater.run_update(force=False,
                                      callback=post_update_callback,
                                      clean=self.clean_install)
 
-            # Should return 0, if not something happened.
-            if updater.verbose:
-                if res == 0:
-                    print("Updater returned successful")
-                else:
-                    print("Updater returned {}, error occurred".format(res))
+                # Should return 0, if not something happened.
+                if updater.verbose:
+                    if res == 0:
+                        print(f"Updater returned successful: {mad_module}")
+                    else:
+                        print(f"Updater returned {res}, error occurred: {mad_module}")
         elif updater.update_ready is None:
             _ = updater.check_for_update(now=True)
 

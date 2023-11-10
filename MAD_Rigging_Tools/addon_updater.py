@@ -1743,3 +1743,4 @@ class GitlabEngine:
 # -----------------------------------------------------------------------------
 
 Updater = SingletonUpdater()
+UpdaterGlobal= SingletonUpdater()
