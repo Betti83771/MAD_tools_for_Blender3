@@ -80,4 +80,4 @@ class Prefs(bpy.types.AddonPreferences):
         addon_updater_ops.update_settings_ui(self,context)
         row = layout.row()
         row.label(text=f"Update all the MAD Tools addons")
-        #addon_updater_ops_global.update_settings_ui_condensed(self,context)
+        addon_updater_ops_global.update_settings_ui_condensed(self,context)

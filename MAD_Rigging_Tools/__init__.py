@@ -74,7 +74,7 @@ from .image_sequence_node_autorig import isoa_register, isoa_unregister
 def register():
     import_and_reload_all_modules([])
     addon_updater_ops.addon_update_register(bl_info)
-   # addon_updater_ops_global.addon_update_register(bl_info)
+    addon_updater_ops_global.addon_update_register(bl_info)
     bpy.utils.register_class(Prefs)
     try:
         bpy.ops.object.refresh_drivers.poll()
@@ -100,5 +100,5 @@ def unregister():
     else:
         refr_drvs_unregister()
     bpy.utils.unregister_class(Prefs)
-    #addon_updater_ops_global.addon_update_unregister()
+    addon_updater_ops_global.addon_update_unregister()
     addon_updater_ops.addon_update_unregister()
