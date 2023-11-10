@@ -321,7 +321,7 @@ class RigGpPanel(bpy.types.Panel):
     bl_label = "Grease Pencil autorig"
     bl_idname = "MST_PT_Gprig"
     bl_space_type = 'NODE_EDITOR'
-    bl_category = "MAD Shading Tools"
+    bl_category = "MAD Rigging Tools"
     bl_region_type = 'UI'
     bl_options = {'DEFAULT_CLOSED'}
 

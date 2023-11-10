@@ -99,7 +99,7 @@ class NodeRigPanel(bpy.types.Panel):
     bl_label = "Node inputs to target"
     bl_idname = "MST_PT_noderig"
     bl_space_type = 'NODE_EDITOR'
-    bl_category = "MAD Shading Tools"
+    bl_category = "MAD Rigging Tools"
     bl_region_type = 'UI'
 
 
