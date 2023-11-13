@@ -84,7 +84,7 @@ def copy_paste_custom_props_register():
     bpy.utils.register_class(PasteBoneCustomPropsOperator)
     bpy.types.VIEW3D_MT_pose_context_menu.append(cpcp_menu_func)
 
-def copy_paste_custom_props__unregister():
+def copy_paste_custom_props_unregister():
     bpy.utils.unregister_class(CopyBoneCustomPropsOperator)
     bpy.utils.unregister_class(PasteBoneCustomPropsOperator)
     bpy.types.VIEW3D_MT_pose_context_menu.remove(cpcp_menu_func)
