@@ -1,9 +1,6 @@
 import bpy
 from os import sep
 
-from .rigaprop_script import *
-
-
 
 def rename_all_paths_with_filename_2():
     """filewise"""
@@ -55,9 +52,9 @@ def recursively_find_rig(collection:bpy.types.Collection):
         rig = recursively_find_rig(coll)
     return rig
 
-class TwoBRelocatePaths(bpy.types.Operator):
+class MADRelocatePaths(bpy.types.Operator):
     """Replaces the old path with the new one in every library."""
-    bl_idname = "twob.relocate_paths"
+    bl_idname = "mad_utils.relocate_paths"
     bl_label = "Relocate library paths"
     bl_options = {'UNDO'}
 
@@ -73,15 +70,3 @@ class TwoBRelocatePaths(bpy.types.Operator):
             self.report(type={"WARNING"}, message="No libraries found o relocate!")
         return  {'FINISHED'}
 
-
-
-
-class TwoBRigaprop(bpy.types.Operator):
-    """aaa."""
-    bl_idname = "twob.make_proprig_collections_and_metarig"
-    bl_label = "Make collections and metarig"
-    bl_options = {'UNDO'}
-
-    def execute(self, context):
-        rigaprop(context)
-        return  {'FINISHED'}
