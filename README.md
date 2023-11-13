@@ -7,7 +7,7 @@ This packate installs 4 different addons that can be individually toggled from t
 These addons are compatible with Blender 3.0+.
 
 ## Install instructions:
-1. Download the MAD_tools_for_blender3_install.zip from the repository.
+1. Download the [MAD_tools_for_blender3_install.zip](https://github.com/Betti83771/MAD_tools_for_Blender3/raw/main/MAD_tools_for_Blender3_install.zip) from the repository.
 2. Open Blender.
 3. Go to Edit->Preferences.
 4. On the left side bar, click Addons.
