@@ -72,7 +72,7 @@ except Exception as e:
 # not match and have errors. Must be all lowercase and no spaces! Should also
 # be unique among any other addons that could exist (using this updater code),
 # to avoid clashes in operator registration.
-updater.addon = "mad_rigging_tools"
+updater.addon = "mad_animation_tools"
 
 
 # -----------------------------------------------------------------------------
@@ -1362,12 +1362,12 @@ def addon_update_register(bl_info):
     # updater.addon = # define at top of module, MUST be done first
 
     # Website for manual addon download, optional but recommended to set.
-    updater.website = "https://github.com/Betti83771/MAD_tools_for_Blender3/tree/main/MAD_Rigging_Tools"
+    updater.website = "https://github.com/Betti83771/MAD_tools_for_Blender3/tree/main/MAD_Animation_Tools"
 
     # Addon subfolder path.
     # "sample/path/to/addon"
     # default is "" or None, meaning root
-    updater.subfolder_path = "/MAD_Rigging_Tools"
+    updater.subfolder_path = "/MAD_Animation_Tools"
 
     # Used to check/compare versions.
     updater.current_version = bl_info["version"]
