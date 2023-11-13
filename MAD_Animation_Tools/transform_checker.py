@@ -104,12 +104,12 @@ class ApplyFromPanel(bpy.types.Operator):
         return {'FINISHED'}
 
 class TransformCheckerPanel(bpy.types.Panel):
-    """Creates a Panel in the Food Wizards panel in 3D View, with
+    """Creates a Panel in the MAD Animation Tools panel in 3D View, with
     unapplied transforms and a handy operator do apply them 'on the fly' ;)"""
     bl_label = "Transform Checker"
     bl_idname = "OBJECT_PT_tracheck"
     bl_space_type = 'VIEW_3D'
-    bl_category = "Food Wizards"
+    bl_category = "MAD Animation Tools"
     bl_region_type = 'UI'
     bl_options = {'DEFAULT_CLOSED'}
 
@@ -124,7 +124,7 @@ class TCSubpanelNormalObjs(bpy.types.Panel):
     bl_label = "Objects"
     bl_idname = "OBJECT_PT_tc_subpanel_normalobjs"
     bl_space_type = 'VIEW_3D'
-    bl_category = "Food Wizards"
+    bl_category = "MAD Animation Tools"
     bl_region_type = 'UI'
     bl_parent_id = 'OBJECT_PT_tracheck'
 
@@ -165,7 +165,7 @@ class TCSubpanelArmatures(bpy.types.Panel):
     bl_label = "Armatures"
     bl_idname = "OBJECT_PT_tc_subpanel_armatures"
     bl_space_type = 'VIEW_3D'
-    bl_category = "Food Wizards"
+    bl_category = "MAD Animation Tools"
     bl_region_type = 'UI'
     bl_parent_id = 'OBJECT_PT_tracheck'
 
@@ -191,7 +191,7 @@ class TCSubpanelCurves(bpy.types.Panel):
     bl_label = "Curves"
     bl_idname = "OBJECT_PT_tc_subpanel_curves"
     bl_space_type = 'VIEW_3D'
-    bl_category = "Food Wizards"
+    bl_category = "MAD Animation Tools"
     bl_region_type = 'UI'
     bl_parent_id = 'OBJECT_PT_tracheck'
 
@@ -217,7 +217,7 @@ class TCSubpanelEmpties(bpy.types.Panel):
     bl_label = "Empties"
     bl_idname = "OBJECT_PT_tc_subpanel_empties"
     bl_space_type = 'VIEW_3D'
-    bl_category = "Food Wizards"
+    bl_category = "MAD Animation Tools"
     bl_region_type = 'UI'
     bl_parent_id = 'OBJECT_PT_tracheck'
 
@@ -241,7 +241,7 @@ class TCSubpanelGP(bpy.types.Panel):
     bl_label = "Grease pencils"
     bl_idname = "OBJECT_PT_tc_subpanel_gp"
     bl_space_type = 'VIEW_3D'
-    bl_category = "Food Wizards"
+    bl_category = "MAD Animation Tools"
     bl_region_type = 'UI'
     bl_parent_id = 'OBJECT_PT_tracheck'
 

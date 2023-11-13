@@ -29,7 +29,7 @@ class GPCSubpanelGP(bpy.types.Panel):
     bl_label = "Grease pencil checker"
     bl_idname = "OBJECT_PT_gpc_panel"
     bl_space_type = 'VIEW_3D'
-    bl_category = "Food Wizards"
+    bl_category = "MAD Animation Tools"
     bl_region_type = 'UI'
     bl_options = {'DEFAULT_CLOSED'}
 
