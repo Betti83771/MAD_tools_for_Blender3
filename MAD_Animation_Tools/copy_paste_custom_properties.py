@@ -1,10 +1,7 @@
 import bpy
 from mathutils import Vector
 
-version = (1, 1)
-
-PREF_TEXT = "Copy / paste custom properties"
-PREF_DESCRIPTION = "Activate feature: 'Copy / paste custom properties', pose bone context menu"
+version = (1, 2)
 
 class CopyBoneCustomPropsOperator(bpy.types.Operator):
     """Copy the values of this bone's Custom Properties, to be pasted on another bone's same custom properties"""
@@ -60,13 +57,14 @@ class PasteBoneCustomPropsOperator(bpy.types.Operator):
             if keyvalue[0] not in context.active_pose_bone.keys():
                 continue
             #if keyvalue[0] == '_RNA_UI': continue
-            actual_value = eval(keyvalue[1])
+            new_value = eval(keyvalue[1])
             
-            if actual_value is not None:
-                context.active_pose_bone[keyvalue[0]] = actual_value
+            if new_value is not None:
+                context.active_pose_bone[keyvalue[0]] = new_value
             else:
                 self.report(type={'WARNING'}, message=f"can't convert the stored value '{keyvalue[1]}' into a Int, Float or Vector type.")
                 context.window_manager['cpcp_clipboard'] = context.window_manager['cpcp_clipboard'].replace(keyvalue[0], "").replace(keyvalue[1], "")
+      #  context.active_bone.update_tag()
         return {'FINISHED'}
     
 def cpcp_menu_func(self, context):
