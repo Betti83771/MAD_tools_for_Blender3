@@ -22,7 +22,7 @@ bl_info = {
     "version": (2, 0, 0),
     "blender": (3, 0, 0),
     "location": "Viewport > MAD File Construction Tools",
-    "description": """In this addon: Material node autorig, image sequence &co. node autorig, grease pencil shading autorig""",
+    "description": """In this addon: Update Compositor Node Tree""",
     "warning": "",
     "doc_url": "",
     "category": "File Construction",
@@ -62,12 +62,9 @@ def import_and_reload_all_modules(modules_names:list):
 
 from . import addon_updater_ops 
 from . import addon_updater_ops_global 
+from .preferences_ui import Prefs
 #from .ui import *
-#from .preferences_ui import Prefs
-#from .material_node_rig.node_ui import *
-#from .deps.operators_refresh_drivers import refr_drvs_register, refr_drvs_unregister
-#from .gp_shading.grease_pencil_rigging import gpr_register, gpr_unregister
-#from .image_sequence_node_autorig import isoa_register, isoa_unregister
+from .update_comp_node_tree import update_comp_node_tree_register, update_comp_node_tree_unregister
 
 
 
@@ -75,11 +72,9 @@ def register():
     import_and_reload_all_modules([])
     addon_updater_ops.addon_update_register(bl_info)
     addon_updater_ops_global.addon_update_register(bl_info)
-#    bpy.utils.register_class(Prefs)
-#    try:
- #       bpy.ops.object.refresh_drivers.poll()
- #   except AttributeError:
- #       refr_drvs_register()
+    update_comp_node_tree_register()
+    bpy.utils.register_class(Prefs)
+
  #   node_ui_register()
  #   gpr_register()
  #   isoa_register()  
@@ -93,12 +88,8 @@ def unregister():
  #   isoa_unregister()
  #   gpr_unregister()
  #   node_ui_unregister()
- #   try:
-  #      bpy.ops.object.refresh_drivers.poll()
-  #  except AttributeError:
-  #      pass
-  #  else:
-  #      refr_drvs_unregister()
-  #  bpy.utils.unregister_class(Prefs)
+
+    bpy.utils.unregister_class(Prefs)
+    update_comp_node_tree_unregister()
     addon_updater_ops_global.addon_update_unregister()
     addon_updater_ops.addon_update_unregister()

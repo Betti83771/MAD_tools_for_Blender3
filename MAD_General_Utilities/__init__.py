@@ -22,7 +22,7 @@ bl_info = {
     "version": (2, 0, 0),
     "blender": (3, 0, 0),
     "location": "Viewport > MAD General Utilities",
-    "description": """In this addon: Material node autorig, image sequence &co. node autorig, grease pencil shading autorig""",
+    "description": """In this addon: Bind/Unbind all mesh cages, Relocate Paths, Remove Broken Drivers and Refresh Drivers""",
     "warning": "",
     "doc_url": "",
     "category": "Production",
@@ -62,12 +62,11 @@ def import_and_reload_all_modules(modules_names:list):
 
 from . import addon_updater_ops 
 from . import addon_updater_ops_global 
-#from .ui import *
-#from .preferences_ui import Prefs
-#from .material_node_rig.node_ui import *
-#from .deps.operators_refresh_drivers import refr_drvs_register, refr_drvs_unregister
-#from .gp_shading.grease_pencil_rigging import gpr_register, gpr_unregister
-#from .image_sequence_node_autorig import isoa_register, isoa_unregister
+from .bind_unbind import BindAll
+from .operators_refresh_drivers import refr_drvs_register, refr_drvs_unregister
+from .relocate_library_path import MADRelocatePaths
+from .preferences_ui import Prefs
+from .ui import ui_register, ui_unregister
 
 
 
@@ -75,30 +74,30 @@ def register():
     import_and_reload_all_modules([])
     addon_updater_ops.addon_update_register(bl_info)
     addon_updater_ops_global.addon_update_register(bl_info)
-#    bpy.utils.register_class(Prefs)
-#    try:
- #       bpy.ops.object.refresh_drivers.poll()
- #   except AttributeError:
- #       refr_drvs_register()
- #   node_ui_register()
- #   gpr_register()
- #   isoa_register()  
- #   ui_register()
+    bpy.utils.register_class(Prefs)
+    bpy.utils.register_class(MADRelocatePaths)
+    bpy.utils.register_class(BindAll)
+    try:
+        bpy.ops.object.refresh_drivers.poll()
+    except AttributeError:
+        refr_drvs_register()
+ 
+    ui_register()
     
     
 
 
 def unregister():
-#    ui_unregister()
- #   isoa_unregister()
- #   gpr_unregister()
- #   node_ui_unregister()
- #   try:
-  #      bpy.ops.object.refresh_drivers.poll()
-  #  except AttributeError:
-  #      pass
-  #  else:
-  #      refr_drvs_unregister()
-  #  bpy.utils.unregister_class(Prefs)
+    ui_unregister()
+
+    try:
+        bpy.ops.object.refresh_drivers.poll()
+    except AttributeError:
+        pass
+    else:
+        refr_drvs_unregister()
+    bpy.utils.unregister_class(BindAll)
+    bpy.utils.unregister_class(MADRelocatePaths)
+    bpy.utils.unregister_class(Prefs)
     addon_updater_ops_global.addon_update_unregister()
     addon_updater_ops.addon_update_unregister()
