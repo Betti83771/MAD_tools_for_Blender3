@@ -46,7 +46,7 @@ def bind_menu_func(self, context):
 
 class BindAll(bpy.types.Operator):
     """Bind or unbind all geometry that refers to the active mesh cage as target."""
-    bl_idname = "object.bind_all"
+    bl_idname = "mad_utils.bind_all"
     bl_label = "Toggle Bind all"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -69,15 +69,15 @@ class BindAll(bpy.types.Operator):
             self.report({'INFO'}, "Geometry binded")
         return {'FINISHED'}
 
-def fw_register():
+def bind_all_register():
     bpy.utils.register_class(BindAll)
     bpy.types.VIEW3D_MT_object.append(bind_menu_func)
 
 
-def fw_unregister():
+def bind_all_unregister():
     bpy.types.VIEW3D_MT_object.remove(bind_menu_func)
     bpy.utils.unregister_class(BindAll)
 
 
 if __name__ == "__main__":
-    fw_register()
+    bind_all_register()

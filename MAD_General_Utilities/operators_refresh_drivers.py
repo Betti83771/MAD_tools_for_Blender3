@@ -41,7 +41,7 @@ def remove_broken_drivers(datablock):
 class RefreshDrivers(bpy.types.Operator):
 	"""Refresh drivers, ensuring no valid drivers are marked as invalid"""
 
-	bl_idname = "object.refresh_drivers"
+	bl_idname = "mad_utils.refresh_drivers"
 	bl_label = "Refresh Drivers"
 	bl_options = {'REGISTER', 'UNDO'}
 
@@ -70,7 +70,7 @@ class RefreshDrivers(bpy.types.Operator):
 class RemoveBrokenDrivers(bpy.types.Operator):
 	"""Remove broven drivers drivers, ensuring no drivers are marked as invalid -- we can hope"""
 
-	bl_idname = "object.remobe_broken_drivers"
+	bl_idname = "mad_utils.remobe_broken_drivers"
 	bl_label = "Remove broken Drivers"
 	bl_options = {'REGISTER', 'UNDO'}
 
@@ -106,14 +106,14 @@ def driv_menu_func(self, context):
 	
 
 
-def fw_register():
+def refr_drvs_register():
 	from bpy.utils import register_class
 	bpy.types.WindowManager.rd_selected_only = bpy.props.BoolProperty(name="Only Selected Objects", default=True)
 	bpy.types.VIEW3D_MT_object.append(driv_menu_func)
 	register_class(RefreshDrivers)
 	register_class(RemoveBrokenDrivers)
 
-def fw_unregister():
+def refr_drvs_unregister():
 	from bpy.utils import unregister_class
 	bpy.types.VIEW3D_MT_object.remove(driv_menu_func)
 	unregister_class(RemoveBrokenDrivers)
@@ -121,4 +121,4 @@ def fw_unregister():
 	del bpy.types.WindowManager.rd_selected_only
 
 if __name__ == '__main__':
-	fw_register()
+	refr_drvs_register()
