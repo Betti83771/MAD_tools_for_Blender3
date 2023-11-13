@@ -1,8 +1,5 @@
 import bpy
 
-PREF_TEXT = 'Grease Pencil Layer Checker'
-PREF_DESCRIPTION = "Activate feature: 'GP Layer Checker'"
-
 def gp_apply_from_panel(obj_name, layer_name, type):
     layer = bpy.data.objects[obj_name].data.layers[layer_name]
     if type == "not_use_lights":
@@ -12,7 +9,7 @@ def gp_apply_from_panel(obj_name, layer_name, type):
 
 class GPApplyFromPanel(bpy.types.Operator):
     """Apply this information to the object"""
-    bl_idname = "fw.gp_apply_from_panel"
+    bl_idname = "mad_anim_tools.gp_apply_from_panel"
     bl_label = "Apply"
 
     obj_name: bpy.props.StringProperty(name="obj_name")
@@ -55,7 +52,7 @@ class GPCSubpanelGP(bpy.types.Panel):
                     name_layer = True
                     row = self.layout.row()
                     row.label(text="    Use lights is active")
-                    apply = row.operator("fw.gp_apply_from_panel", text="Disable")
+                    apply = row.operator("mad_anim_tools.gp_apply_from_panel", text="Disable")
                     apply.obj_name = gp_obj_name
                     apply.layer_name = layer.info
                     apply.type = "not_use_lights"
@@ -69,21 +66,21 @@ class GPCSubpanelGP(bpy.types.Panel):
                         row.label(text="   " + layer.info)
                     row = self.layout.row()
                     row.label(text="    Opacity is 1")
-                    apply = row.operator("fw.gp_apply_from_panel", text="Set to 0.5")
+                    apply = row.operator("mad_anim_tools.gp_apply_from_panel", text="Set to 0.5")
                     apply.obj_name = gp_obj_name
                     apply.layer_name = layer.info
                     apply.type = "opacity"
                     
                 
-def fw_register():
+def grease_pencil_layer_ckecker_register():
     bpy.utils.register_class(GPApplyFromPanel)
     bpy.utils.register_class(GPCSubpanelGP)
 
-def fw_unregister():
+def grease_pencil_layer_ckecker_unregister():
     bpy.utils.unregister_class(GPCSubpanelGP)
     bpy.utils.unregister_class(GPApplyFromPanel)
 
 
 if __name__ == "__main__":
-    fw_register()
+    grease_pencil_layer_ckecker_register()
 

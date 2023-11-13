@@ -1,7 +1,28 @@
 import bpy
 from .ExtraSettingComp import *
-from .deps.relocate_library_path import rename_all_paths_with_filename_2
 
+def rename_all_paths_with_filename_2():
+    """filewise"""
+    to_replace_with_SCE = "SCE" + bpy.path.basename(bpy.data.filepath).split("SCE")[-1][:3]
+    to_replace_with_CUT = "CUT" + bpy.path.basename(bpy.data.filepath).split("CUT")[-1][:3]
+    if to_replace_with_SCE == "nopatt" or to_replace_with_CUT == "nopatt":
+        return
+    for scene in bpy.data.scenes:
+        if scene.library != None: continue # se la scena è linkata, non fare niente
+        for node in scene.node_tree.nodes: # per ogni nodo nel compositor node tree della scena:
+            existing_base_path = getattr(node, "base_path", None) # prendi il base path del nodo
+            if not existing_base_path: continue # se non c'è il base path, non fare più niente
+            to_be_replaced_SCE_list = ["SCE" + tbr[:3] for tbr in node.base_path.split("SCE") if tbr[2].isdigit()]
+            to_be_replaced_CUT_list = ["CUT" + tbr[:3] for tbr in node.base_path.split("CUT") if tbr[2].isdigit()]
+            for to_be_replaced_SCE in to_be_replaced_SCE_list:
+                node.base_path = node.base_path.replace(to_be_replaced_SCE, to_replace_with_SCE) 
+            for to_be_replaced_CUT in to_be_replaced_CUT_list:
+                node.base_path = node.base_path.replace(to_be_replaced_CUT, to_replace_with_CUT) 
+            
+        ren_to_be_replaced_SCE = "SCE" + scene.render.filepath.split("SCE")[-1][:3]
+        ren_to_be_replaced_CUT = "CUT" + scene.render.filepath.split("CUT")[-1][:3]
+        scene.render.filepath = scene.render.filepath.replace(ren_to_be_replaced_SCE, to_replace_with_SCE)
+        scene.render.filepath = scene.render.filepath.replace(ren_to_be_replaced_CUT, to_replace_with_CUT)
 
 
 def  overwrite_tree(self, scene_to_be_overwritten:bpy.types.Scene, scene_to_copy_from:bpy.types.Scene):
@@ -106,3 +127,78 @@ def update_comp_node_tree_func(self, file_zero_path):
     rename_all_paths_with_filename_2()
     return str(initial_linked_scenes)
             
+class MadUpdateComp(bpy.types.Operator):
+    """Update compositor node tree from specified file zero"""
+    bl_idname = "mad_file_construction.update_compositor_nodes"
+    bl_label = "Update compositor node tree"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    file_zero: bpy.props.StringProperty(
+        name="file_zero"
+    )
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        updated_scenes = update_comp_node_tree_func(self, context.window_manager.twob_file_zero)
+        if updated_scenes == "file_not_found": 
+            self.report({'ERROR'}, f"File not found: {context.window_manager.twob_file_zero}")
+            return {'FINISHED'}
+        self.report({'INFO'}, f"Following scenes node trees updated: {updated_scenes}")
+        return {'FINISHED'}
+
+class MadRenamePaths(bpy.types.Operator):
+    """Rinomina tutti i percorsi del file che contengono il nome del file base, con il nome del file corrente"""
+    bl_idname = "mad_file_construction.rename_paths_filename"
+    bl_label = "Rename Paths with file name"
+    bl_options = {'REGISTER', 'UNDO'}
+
+   # file_zero_name: bpy.props.StringProperty(
+    #    name="file_zero"
+    #)
+
+    #@classmethod
+    #def poll(cls, context):
+     #   return cls.file_zero_name != ""
+
+    def execute(self, context):
+        rename_all_paths_with_filename_2()
+        return{'FINISHED'}
+
+class MadCompositingPanel(bpy.types.Panel):
+    """Panel for useful operations regarding file construction"""
+    bl_label = "Compositing"
+    bl_idname = "MFC_PT_comppanel"
+    bl_space_type = 'VIEW_3D'
+    bl_category = "2B"
+    bl_region_type = 'UI'
+    def draw(self, context):
+        layout = self.layout
+        layout.row().prop(context.window_manager, "mad_file_construction_file_zero")
+        layout.row().operator( "mad_file_construction.update_compositor_nodes")
+        layout.row().label(text="Update the Scenes and Layers names first, otherwise this may fail.", icon='INFO')
+        layout.row().separator
+        layout.row().operator( "mad_file_construction.rename_paths_filename")
+        layout.row().separator
+
+classes = [
+    #  classes here
+    MadUpdateComp,
+    MadRenamePaths,
+    MadCompositingPanel
+]
+
+def update_comp_node_tree_register():
+    bpy.types.WindowManager.mad_file_construction_file_zero = bpy.props.StringProperty(subtype='FILE_PATH',
+                        name="File zero",
+                        default=f"//..{os.sep}3D_ANM_SCE000{os.sep}3D_ANM_SCE000_CUT000.blend")
+    for cls in classes:
+        bpy.utils.register_class(cls)
+
+def update_comp_node_tree_unregister():
+    for cls in reversed(classes):
+        bpy.utils.unregister_class(cls)
+    
+    del bpy.types.WindowManager.mad_file_construction_file_zero

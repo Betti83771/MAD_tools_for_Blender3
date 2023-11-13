@@ -1,8 +1,6 @@
 import bpy
 from mathutils import Euler, Matrix, Vector, Quaternion
 
-PREF_TEXT = 'Transform Checker'
-PREF_DESCRIPTION = "Activate feature: 'Transform Checker'"
 
 def apply_from_panel(obj, type):
     """type must be 'location', 'rotation', 'scale'"""
@@ -266,7 +264,7 @@ class TCSubpanelGP(bpy.types.Panel):
             apply_button_show(self, obj, 'scale')
 
 
-def fw_register():
+def transform_checker_register():
     bpy.utils.register_class(ApplyFromPanel)
     bpy.utils.register_class(SelectFromPanel)
     bpy.utils.register_class(TransformCheckerPanel)
@@ -277,7 +275,7 @@ def fw_register():
     bpy.utils.register_class(TCSubpanelCurves)
 
 
-def fw_unregister():
+def transform_checker_unregister():
     bpy.utils.unregister_class(TCSubpanelCurves)
     bpy.utils.unregister_class(TCSubpanelGP)
     bpy.utils.unregister_class(TCSubpanelEmpties)
@@ -289,4 +287,4 @@ def fw_unregister():
 
 
 if __name__ == "__main__":
-    fw_register()
+    transform_checker_register()
