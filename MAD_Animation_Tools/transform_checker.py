@@ -33,6 +33,10 @@ def apply_button_show(self, obj, type, nameshow=True):
                 if obj.scale == Vector((1.0, 1.0, 1.0)):
                     return
                 text = "Scale"
+            if type == 'location':
+                if obj.location == Vector((0.0, 0.0, 0.0)):
+                    return
+                text = "Location"
             if type == 'quat_rot':
                 if obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)):
                     return
@@ -116,7 +120,29 @@ class TransformCheckerPanel(bpy.types.Panel):
     def draw(self, context):
         
         layout = self.layout
-        #transferred to subpanels
+
+        row= layout.row()
+        row.label(text="Hide:")
+        row= layout.row()
+        if context.window_manager.mad_transform_checker_hide_loc:
+            icon_loc='HIDE_ON'
+        else:
+            icon_loc='HIDE_OFF'
+        row.prop(context.window_manager, "mad_transform_checker_hide_loc", icon=icon_loc)
+
+        row= layout.row()
+        if context.window_manager.mad_transform_checker_hide_rot:
+            icon_rot='HIDE_ON'
+        else:
+            icon_rot='HIDE_OFF'
+        row.prop(context.window_manager, "mad_transform_checker_hide_rot", icon=icon_rot)
+
+        row= layout.row()
+        if context.window_manager.mad_transform_checker_hide_scale:
+            icon_scale='HIDE_ON'
+        else:
+            icon_scale='HIDE_OFF'
+        row.prop(context.window_manager, "mad_transform_checker_hide_scale", icon=icon_scale)
         
         
 
@@ -148,18 +174,24 @@ class TCSubpanelNormalObjs(bpy.types.Panel):
                 continue
             if "WGT" in obj.name:
                 continue
-            if obj.scale == Vector((1.0, 1.0, 1.0)) and obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)) and obj.rotation_euler == Euler((0.0, 0.0, 0.0)):
+            if obj.scale == Vector((1.0, 1.0, 1.0)) and \
+            obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)) and \
+            obj.rotation_euler == Euler((0.0, 0.0, 0.0)) and \
+            obj.location == Vector((0.0, 0.0, 0.0)) :
                 continue
             
             row= layout.row()
             select_button_show(obj, row)
             nameshow(obj, row)
-            if obj.rotation_mode == 'QUATERNION':
-                apply_button_show(self, obj, 'quat_rot')
-            else:
-                apply_button_show(self, obj, 'eu_rot')
-            apply_button_show(self, obj, 'scale')
-
+            if not context.window_manager.mad_transform_checker_hide_rot:
+                if obj.rotation_mode == 'QUATERNION':
+                    apply_button_show(self, obj, 'quat_rot')
+                else:
+                    apply_button_show(self, obj, 'eu_rot')
+            if not context.window_manager.mad_transform_checker_hide_scale:
+                apply_button_show(self, obj, 'scale')
+            if not context.window_manager.mad_transform_checker_hide_loc:
+                apply_button_show(self, obj, 'location')
 
 class TCSubpanelArmatures(bpy.types.Panel):
     bl_label = "Armatures"
@@ -175,17 +207,24 @@ class TCSubpanelArmatures(bpy.types.Panel):
                 continue
             if obj.data.name not in bpy.data.armatures:
                 continue
-            if obj.scale == Vector((1.0, 1.0, 1.0)) and obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)) and obj.rotation_euler == Euler((0.0, 0.0, 0.0)):
+            if obj.scale == Vector((1.0, 1.0, 1.0)) and \
+            obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)) and \
+            obj.rotation_euler == Euler((0.0, 0.0, 0.0)) and \
+            obj.location == Vector((0.0, 0.0, 0.0)) :
                 continue
 
             row= self.layout.row()
             select_button_show(obj, row)
             nameshow(obj, row)
-            if obj.rotation_mode == 'QUATERNION':
-                apply_button_show(self, obj, 'quat_rot')
-            else:
-                apply_button_show(self, obj, 'eu_rot')
-            apply_button_show(self, obj, 'scale')
+            if not context.window_manager.mad_transform_checker_hide_rot:
+                if obj.rotation_mode == 'QUATERNION':
+                    apply_button_show(self, obj, 'quat_rot')
+                else:
+                    apply_button_show(self, obj, 'eu_rot')
+            if not context.window_manager.mad_transform_checker_hide_scale:
+                apply_button_show(self, obj, 'scale')
+            if not context.window_manager.mad_transform_checker_hide_loc:
+                apply_button_show(self, obj, 'location')
 
 class TCSubpanelCurves(bpy.types.Panel):
     bl_label = "Curves"
@@ -201,17 +240,24 @@ class TCSubpanelCurves(bpy.types.Panel):
                 continue
             if obj.data.name not in bpy.data.curves:
                 continue
-            if obj.scale == Vector((1.0, 1.0, 1.0)) and obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)) and obj.rotation_euler == Euler((0.0, 0.0, 0.0)):
+            if obj.scale == Vector((1.0, 1.0, 1.0)) and \
+            obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)) and \
+            obj.rotation_euler == Euler((0.0, 0.0, 0.0)) and \
+            obj.location == Vector((0.0, 0.0, 0.0)) :
                 continue
 
             row= self.layout.row()
             select_button_show(obj, row)
             nameshow(obj, row)
-            if obj.rotation_mode == 'QUATERNION':
-                apply_button_show(self, obj, 'quat_rot')
-            else:
-                apply_button_show(self, obj, 'eu_rot')
-            apply_button_show(self, obj, 'scale')
+            if not context.window_manager.mad_transform_checker_hide_rot:
+                if obj.rotation_mode == 'QUATERNION':
+                    apply_button_show(self, obj, 'quat_rot')
+                else:
+                    apply_button_show(self, obj, 'eu_rot')
+            if not context.window_manager.mad_transform_checker_hide_scale:
+                apply_button_show(self, obj, 'scale')
+            if not context.window_manager.mad_transform_checker_hide_loc:
+                apply_button_show(self, obj, 'location')
 
 class TCSubpanelEmpties(bpy.types.Panel):
     bl_label = "Empties"
@@ -225,17 +271,24 @@ class TCSubpanelEmpties(bpy.types.Panel):
         for obj in bpy.context.scene.objects: #each for cycle is a row
             if obj.data:
                 continue
-            if obj.scale == Vector((1.0, 1.0, 1.0)) and obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)) and obj.rotation_euler == Euler((0.0, 0.0, 0.0)):
+            if obj.scale == Vector((1.0, 1.0, 1.0)) and \
+            obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)) and \
+            obj.rotation_euler == Euler((0.0, 0.0, 0.0)) and \
+            obj.location == Vector((0.0, 0.0, 0.0)) :
                 continue
 
             row= self.layout.row()
             select_button_show(obj, row)
             nameshow(obj, row)
-            if obj.rotation_mode == 'QUATERNION':
-                apply_button_show(self, obj, 'quat_rot')
-            else:
-                apply_button_show(self, obj, 'eu_rot')
-            apply_button_show(self, obj, 'scale')
+            if not context.window_manager.mad_transform_checker_hide_rot:
+                if obj.rotation_mode == 'QUATERNION':
+                    apply_button_show(self, obj, 'quat_rot')
+                else:
+                    apply_button_show(self, obj, 'eu_rot')
+            if not context.window_manager.mad_transform_checker_hide_scale:
+                apply_button_show(self, obj, 'scale')
+            if not context.window_manager.mad_transform_checker_hide_loc:
+                apply_button_show(self, obj, 'location')
 
 class TCSubpanelGP(bpy.types.Panel):
     bl_label = "Grease pencils"
@@ -251,20 +304,45 @@ class TCSubpanelGP(bpy.types.Panel):
                 continue
             if  obj.data.name not in bpy.data.grease_pencils:
                 continue
-            if obj.scale == Vector((1.0, 1.0, 1.0)) and obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)) and obj.rotation_euler == Euler((0.0, 0.0, 0.0)):
+            if obj.scale == Vector((1.0, 1.0, 1.0)) and \
+            obj.rotation_quaternion == Quaternion((1.0, 0.0, 0.0, 0.0)) and \
+            obj.rotation_euler == Euler((0.0, 0.0, 0.0)) and \
+            obj.location == Vector((0.0, 0.0, 0.0)) :
                 continue
 
             row= self.layout.row()
             select_button_show(obj, row)
             nameshow(obj, row)
-            if obj.rotation_mode == 'QUATERNION':
-                apply_button_show(self, obj, 'quat_rot')
-            else:
-                apply_button_show(self, obj, 'eu_rot')
-            apply_button_show(self, obj, 'scale')
+            if not context.window_manager.mad_transform_checker_hide_rot:
+                if obj.rotation_mode == 'QUATERNION':
+                    apply_button_show(self, obj, 'quat_rot')
+                else:
+                    apply_button_show(self, obj, 'eu_rot')
+            if not context.window_manager.mad_transform_checker_hide_scale:
+                apply_button_show(self, obj, 'scale')
+            if not context.window_manager.mad_transform_checker_hide_loc:
+                apply_button_show(self, obj, 'location')
 
 
 def transform_checker_register():
+    bpy.types.WindowManager.mad_transform_checker_hide_loc = bpy.props.BoolProperty(
+        default=True,
+        name='Location', 
+        description="Hide Location Checks",
+        #update=
+        )
+    bpy.types.WindowManager.mad_transform_checker_hide_rot = bpy.props.BoolProperty(
+        default=False,
+        name='Rotation', 
+        description="Hide Rotation Checks",
+        #update=
+        )
+    bpy.types.WindowManager.mad_transform_checker_hide_scale = bpy.props.BoolProperty(
+        default=False,
+        name='Scale', 
+        description="Hide Scale Checks",
+        #update=
+        )
     bpy.utils.register_class(ApplyFromPanel)
     bpy.utils.register_class(SelectFromPanel)
     bpy.utils.register_class(TransformCheckerPanel)
@@ -284,6 +362,9 @@ def transform_checker_unregister():
     bpy.utils.unregister_class(ApplyFromPanel)
     bpy.utils.unregister_class(SelectFromPanel)
     bpy.utils.unregister_class(TransformCheckerPanel)
+    del bpy.types.WindowManager.mad_transform_checker_hide_scale
+    del bpy.types.WindowManager.mad_transform_checker_hide_rot
+    del bpy.types.WindowManager.mad_transform_checker_hide_loc
 
 
 if __name__ == "__main__":
