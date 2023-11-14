@@ -27,3 +27,23 @@ NOTE: you can update *all* the MAD tools addons at once by clicking the big butt
 If it says that an update isnt available, click "Reinstall": it means that the current addon you are attempting to update the otehrs from is up to date. REinstalling the last version will update all the addons.
 
 You can also set an auto check for updates, that will utomatically propmpt you when update is ready. 
+
+## Addon contents:
+
+1. MAD Animation Tools:
+   - Transform Checker
+   - Grease Pencil Layer Checker
+   - Copy/paste Bone Custom Properties 
+
+2. MAD File Construction Tools:
+   - Update Compositor Node Tree
+   
+3. MAD Rigging Tools:
+   - Material Node Autorig
+   - Image sequence & other personalized material node autorigs
+   - Grease Pencil Shading Modifiers Autorig
+
+4. MAD General Utilities:
+   - Bind/Unbind All Mesh Cages
+   - Refresh Drivers and Remove Broken Drivers
+   - Relocate Library Paths
