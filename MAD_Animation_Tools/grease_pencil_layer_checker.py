@@ -31,7 +31,7 @@ class GPCSubpanelGP(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_category = "MAD Animation Tools"
     bl_region_type = 'UI'
-    bl_options = {'DEFAULT_CLOSED'}
+   # bl_options = {'DEFAULT_CLOSED'}
 
     def draw(self, context):
         for gp in bpy.data.grease_pencils: #each for cycle is a row

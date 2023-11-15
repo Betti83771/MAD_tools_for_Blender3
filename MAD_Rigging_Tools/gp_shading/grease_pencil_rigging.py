@@ -323,7 +323,7 @@ class RigGpPanel(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_category = "MAD Rigging Tools"
     bl_region_type = 'UI'
-    bl_options = {'DEFAULT_CLOSED'}
+   # bl_options = {'DEFAULT_CLOSED'}
 
     def draw(self, context):
         layout = self.layout
