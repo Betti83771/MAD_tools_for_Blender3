@@ -24,7 +24,7 @@ Done! You won't have to do this again. You can update teh add-on from within Ble
 5.  Click "Check now for *addon_name* update"
 6.  If an update is available, click on "Update to *addon version*.
 NOTE: you can update *all* the MAD tools addons at once by clicking the big button "Check for mad_tools update". This will update all the addons installed.
-If it says that an update isnt available, click "Reinstall": it means that the current addon you are attempting to update the otehrs from is up to date. REinstalling the last version will update all the addons.
+
 
 You can also set an auto check for updates, that will utomatically propmpt you when update is ready. 
 
