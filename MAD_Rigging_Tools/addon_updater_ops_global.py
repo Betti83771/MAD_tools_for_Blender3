@@ -79,7 +79,7 @@ except Exception as e:
 # not match and have errors. Must be all lowercase and no spaces! Should also
 # be unique among any other addons that could exist (using this updater code),
 # to avoid clashes in operator registration.
-updater.addon = "mad_tools"
+updater.addon = "mad_tools_rigging_global"
 
 
 # -----------------------------------------------------------------------------
@@ -136,7 +136,7 @@ def get_user_preferences(context=None):
 # Simple popup to prompt use to check for update & offer install if available.
 class AddonUpdaterInstallPopup(bpy.types.Operator):
     """Check and install update if available"""
-    bl_label = "Update {x} addon".format(x=updater.addon)
+    bl_label = "Update all MAD Tools addons"
     bl_idname = updater.addon + ".updater_install_popup"
     bl_description = "Popup to check and display current updates available"
     bl_options = {'REGISTER', 'INTERNAL'}
@@ -250,17 +250,19 @@ class AddonUpdaterInstallPopup(bpy.types.Operator):
 
 # User preference check-now operator
 class AddonUpdaterCheckNow(bpy.types.Operator):
-    bl_label = "Check now for " + updater.addon + " update"
+    bl_label = "Check now for MAD Tools update"
     bl_idname = updater.addon + ".updater_check_now"
-    bl_description = "Check now for an update to the {} addon".format(
-        updater.addon)
+    bl_description = "Check now for an update to the MAD Tools addons"
     bl_options = {'REGISTER', 'INTERNAL'}
 
     def execute(self, context):
+        print("print1", updater.api_url)
         if updater.invalid_updater:
+            print("invalid updater")
             return {'CANCELLED'}
 
         if updater.async_checking and updater.error is None:
+            print("Check already happened.")
             # Check already happened.
             # Used here to just avoid constant applying settings below.
             # Ignoring if error, to prevent being stuck on the error screen.
@@ -283,16 +285,16 @@ class AddonUpdaterCheckNow(bpy.types.Operator):
 
         # Input is an optional callback function. This function should take a
         # bool input. If true: update ready, if false: no update ready.
+        print("print1", updater.api_url)
         updater.check_for_update_now(ui_refresh)
 
         return {'FINISHED'}
 
 
 class AddonUpdaterUpdateNow(bpy.types.Operator):
-    bl_label = "Update " + updater.addon + " addon now"
+    bl_label = "Update all MAD Tools addons now"
     bl_idname = updater.addon + ".updater_update_now"
-    bl_description = "Update to the latest version of the {x} addon".format(
-        x=updater.addon)
+    bl_description = "Update to the latest version of the MAD Tools addons"
     bl_options = {'REGISTER', 'INTERNAL'}
 
     # If true, run clean install - ie remove all files before adding new
@@ -317,16 +319,25 @@ class AddonUpdaterUpdateNow(bpy.types.Operator):
         if updater.update_ready:
             # if it fails, offer to open the website instead
             try:
-                res = updater.run_update(force=False,
-                                         callback=post_update_callback,
-                                         clean=self.clean_install)
+                current_dir = os.path.dirname(__file__)
+                parent_dir = os.path.dirname(current_dir)
+                sys.path.append(parent_dir)
+                for mad_module in MAD_TOOLS_MODULES:
+                    if mad_module not in os.listdir(parent_dir):
+                        continue
+                    imported_mod = importlib.import_module(mad_module + ".addon_updater_ops")
+                    imported_init_bl_info = importlib.import_module(mad_module).bl_info
+                    imported_mod.addon_update_register(imported_init_bl_info)
+                    res = imported_mod.updater.run_update(force=False,
+                                        callback=post_update_callback,
+                                        clean=self.clean_install)
 
-                # Should return 0, if not something happened.
-                if updater.verbose:
-                    if res == 0:
-                        print("Updater returned successful")
-                    else:
-                        print("Updater error response: {}".format(res))
+                    # Should return 0, if not something happened.
+                    if updater.verbose:
+                        if res == 0:
+                            print("Updater returned successful")
+                        else:
+                            print("Updater error response: {}".format(res))
             except Exception as expt:
                 updater._error = "Error trying to run update"
                 updater._error_msg = str(expt)
@@ -351,10 +362,9 @@ class AddonUpdaterUpdateNow(bpy.types.Operator):
 
 
 class AddonUpdaterUpdateTarget(bpy.types.Operator):
-    bl_label = updater.addon + " version target"
+    bl_label = "MAD Tools version target"
     bl_idname = updater.addon + ".updater_update_target"
-    bl_description = "Install a targeted version of the {x} addon".format(
-        x=updater.addon)
+    bl_description = "Install a targeted version of the MAD Tools addons"
     bl_options = {'REGISTER', 'INTERNAL'}
 
     def target_version(self, context):
@@ -841,7 +851,7 @@ def check_for_update_nonthreaded(self, context):
                                days=settings.updater_interval_days_global,
                                hours=settings.updater_interval_hours_global,
                                minutes=settings.updater_interval_minutes_global)
-
+    print("print2", updater.api_url)
     (update_ready, version, link) = updater.check_for_update(now=False)
     if update_ready:
         atr = AddonUpdaterInstallPopup.bl_idname.split(".")
