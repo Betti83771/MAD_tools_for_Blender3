@@ -94,11 +94,10 @@ def unregister():
     gpr_unregister()
     node_ui_unregister()
     try:
-        bpy.ops.object.refresh_drivers.poll()
+        refr_drvs_unregister()
     except AttributeError:
         pass
-    else:
-        refr_drvs_unregister()
+        
     bpy.utils.unregister_class(Prefs)
     addon_updater_ops_global.addon_update_unregister()
     addon_updater_ops.addon_update_unregister()
