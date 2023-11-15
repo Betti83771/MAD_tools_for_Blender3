@@ -172,7 +172,7 @@ class MadCompositingPanel(bpy.types.Panel):
     bl_label = "Compositing"
     bl_idname = "MFC_PT_comppanel"
     bl_space_type = 'VIEW_3D'
-    bl_category = "2B"
+    bl_category = "MAD File Construction Tools"
     bl_region_type = 'UI'
     def draw(self, context):
         layout = self.layout
