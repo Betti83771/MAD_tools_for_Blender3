@@ -127,7 +127,7 @@ def get_user_preferences(context=None):
 
 
 # Simple popup to prompt use to check for update & offer install if available.
-class AddonUpdaterInstallPopup(bpy.types.Operator):
+class FCTAddonUpdaterInstallPopup(bpy.types.Operator):
     """Check and install update if available"""
     bl_label = "Update {x} addon".format(x=updater.addon)
     bl_idname = updater.addon + ".updater_install_popup"
@@ -221,7 +221,7 @@ class AddonUpdaterInstallPopup(bpy.types.Operator):
             _ = updater.check_for_update(now=True)
 
             # Re-launch this dialog.
-            atr = AddonUpdaterInstallPopup.bl_idname.split(".")
+            atr = FCTAddonUpdaterInstallPopup.bl_idname.split(".")
             getattr(getattr(bpy.ops, atr[0]), atr[1])('INVOKE_DEFAULT')
         else:
             updater.print_verbose("Doing nothing, not ready for update")
@@ -229,7 +229,7 @@ class AddonUpdaterInstallPopup(bpy.types.Operator):
 
 
 # User preference check-now operator
-class AddonUpdaterCheckNow(bpy.types.Operator):
+class FCTAddonUpdaterCheckNow(bpy.types.Operator):
     bl_label = "Check now for " + updater.addon + " update"
     bl_idname = updater.addon + ".updater_check_now"
     bl_description = "Check now for an update to the {} addon".format(
@@ -268,7 +268,7 @@ class AddonUpdaterCheckNow(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class AddonUpdaterUpdateNow(bpy.types.Operator):
+class FCTAddonUpdaterUpdateNow(bpy.types.Operator):
     bl_label = "Update " + updater.addon + " addon now"
     bl_idname = updater.addon + ".updater_update_now"
     bl_description = "Update to the latest version of the {x} addon".format(
@@ -311,12 +311,12 @@ class AddonUpdaterUpdateNow(bpy.types.Operator):
                 updater._error = "Error trying to run update"
                 updater._error_msg = str(expt)
                 updater.print_trace()
-                atr = AddonUpdaterInstallManually.bl_idname.split(".")
+                atr = FCTAddonUpdaterInstallManually.bl_idname.split(".")
                 getattr(getattr(bpy.ops, atr[0]), atr[1])('INVOKE_DEFAULT')
         elif updater.update_ready is None:
             (update_ready, version, link) = updater.check_for_update(now=True)
             # Re-launch this dialog.
-            atr = AddonUpdaterInstallPopup.bl_idname.split(".")
+            atr = FCTAddonUpdaterInstallPopup.bl_idname.split(".")
             getattr(getattr(bpy.ops, atr[0]), atr[1])('INVOKE_DEFAULT')
 
         elif not updater.update_ready:
@@ -330,7 +330,7 @@ class AddonUpdaterUpdateNow(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class AddonUpdaterUpdateTarget(bpy.types.Operator):
+class FCTAddonUpdaterUpdateTarget(bpy.types.Operator):
     bl_label = updater.addon + " version target"
     bl_idname = updater.addon + ".updater_update_target"
     bl_description = "Install a targeted version of the {x} addon".format(
@@ -408,7 +408,7 @@ class AddonUpdaterUpdateTarget(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class AddonUpdaterInstallManually(bpy.types.Operator):
+class FCTAddonUpdaterInstallManually(bpy.types.Operator):
     """As a fallback, direct the user to download the addon manually"""
     bl_label = "Install update manually"
     bl_idname = updater.addon + ".updater_install_manually"
@@ -474,7 +474,7 @@ class AddonUpdaterInstallManually(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class AddonUpdaterUpdatedSuccessful(bpy.types.Operator):
+class FCTAddonUpdaterUpdatedSuccessful(bpy.types.Operator):
     """Addon in place, popup telling user it completed or what went wrong"""
     bl_label = "Installation Report"
     bl_idname = updater.addon + ".updater_update_successful"
@@ -559,7 +559,7 @@ class AddonUpdaterUpdatedSuccessful(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class AddonUpdaterRestoreBackup(bpy.types.Operator):
+class FCTAddonUpdaterRestoreBackup(bpy.types.Operator):
     """Restore addon from backup"""
     bl_label = "Restore backup"
     bl_idname = updater.addon + ".updater_restore_backup"
@@ -581,7 +581,7 @@ class AddonUpdaterRestoreBackup(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class AddonUpdaterIgnore(bpy.types.Operator):
+class FCTAddonUpdaterIgnore(bpy.types.Operator):
     """Ignore update to prevent future popups"""
     bl_label = "Ignore update"
     bl_idname = updater.addon + ".updater_ignore"
@@ -606,7 +606,7 @@ class AddonUpdaterIgnore(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class AddonUpdaterEndBackground(bpy.types.Operator):
+class FCTAddonUpdaterEndBackground(bpy.types.Operator):
     """Stop checking for update in the background"""
     bl_label = "End background check"
     bl_idname = updater.addon + ".end_background_check"
@@ -653,7 +653,7 @@ def updater_run_success_popup_handler(scene):
     except:
         pass
 
-    atr = AddonUpdaterUpdatedSuccessful.bl_idname.split(".")
+    atr = FCTAddonUpdaterUpdatedSuccessful.bl_idname.split(".")
     getattr(getattr(bpy.ops, atr[0]), atr[1])('INVOKE_DEFAULT')
 
 
@@ -691,7 +691,7 @@ def updater_run_install_popup_handler(scene):
                     updater.addon))
             updater.json_reset_restore()
             return
-    atr = AddonUpdaterInstallPopup.bl_idname.split(".")
+    atr = FCTAddonUpdaterInstallPopup.bl_idname.split(".")
     getattr(getattr(bpy.ops, atr[0]), atr[1])('INVOKE_DEFAULT')
 
 
@@ -750,14 +750,14 @@ def post_update_callback(module_name, res=None):
         updater.print_verbose(
             "{} updater: Running post update callback".format(updater.addon))
 
-        atr = AddonUpdaterUpdatedSuccessful.bl_idname.split(".")
+        atr = FCTAddonUpdaterUpdatedSuccessful.bl_idname.split(".")
         getattr(getattr(bpy.ops, atr[0]), atr[1])('INVOKE_DEFAULT')
         global ran_update_success_popup
         ran_update_success_popup = True
     else:
         # Some kind of error occurred and it was unable to install, offer
         # manual download instead.
-        atr = AddonUpdaterUpdatedSuccessful.bl_idname.split(".")
+        atr = FCTAddonUpdaterUpdatedSuccessful.bl_idname.split(".")
         getattr(getattr(bpy.ops, atr[0]), atr[1])('INVOKE_DEFAULT', error=res)
     return
 
@@ -824,7 +824,7 @@ def check_for_update_nonthreaded(self, context):
 
     (update_ready, version, link) = updater.check_for_update(now=False)
     if update_ready:
-        atr = AddonUpdaterInstallPopup.bl_idname.split(".")
+        atr = FCTAddonUpdaterInstallPopup.bl_idname.split(".")
         getattr(getattr(bpy.ops, atr[0]), atr[1])('INVOKE_DEFAULT')
     else:
         updater.print_verbose("No update ready")
@@ -920,16 +920,16 @@ def update_notice_box_ui(self, context):
     split = row.split(align=True)
     colL = split.column(align=True)
     colL.scale_y = 1.5
-    colL.operator(AddonUpdaterIgnore.bl_idname, icon="X", text="Ignore")
+    colL.operator(FCTAddonUpdaterIgnore.bl_idname, icon="X", text="Ignore")
     colR = split.column(align=True)
     colR.scale_y = 1.5
     if not updater.manual_only:
-        colR.operator(AddonUpdaterUpdateNow.bl_idname,
+        colR.operator(FCTAddonUpdaterUpdateNow.bl_idname,
                       text="Update", icon="LOOP_FORWARDS")
         col.operator("wm.url_open", text="Open website").url = updater.website
         # ops = col.operator("wm.url_open",text="Direct download")
         # ops.url=updater.update_link
-        col.operator(AddonUpdaterInstallManually.bl_idname,
+        col.operator(FCTAddonUpdaterInstallManually.bl_idname,
                      text="Install manually")
     else:
         # ops = col.operator("wm.url_open", text="Direct download")
@@ -1007,30 +1007,30 @@ def update_settings_ui(self, context, element=None):
         split.scale_y = 2
         if "ssl" in updater.error_msg.lower():
             split.enabled = True
-            split.operator(AddonUpdaterInstallManually.bl_idname,
+            split.operator(FCTAddonUpdaterInstallManually.bl_idname,
                            text=updater.error)
         else:
             split.enabled = False
-            split.operator(AddonUpdaterCheckNow.bl_idname,
+            split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                            text=updater.error)
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname,
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                        text="", icon="FILE_REFRESH")
 
     elif updater.update_ready is None and not updater.async_checking:
         col.scale_y = 2
-        col.operator(AddonUpdaterCheckNow.bl_idname)
+        col.operator(FCTAddonUpdaterCheckNow.bl_idname)
     elif updater.update_ready is None:  # async is running
         sub_col = col.row(align=True)
         sub_col.scale_y = 1
         split = sub_col.split(align=True)
         split.enabled = False
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname, text="Checking...")
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname, text="Checking...")
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterEndBackground.bl_idname, text="", icon="X")
+        split.operator(FCTAddonUpdaterEndBackground.bl_idname, text="", icon="X")
 
     elif updater.include_branches and \
             len(updater.tags) == len(updater.include_branch_list) and not \
@@ -1042,10 +1042,10 @@ def update_settings_ui(self, context, element=None):
         split.scale_y = 2
         update_now_txt = "Update directly to {}".format(
             updater.include_branch_list[0])
-        split.operator(AddonUpdaterUpdateNow.bl_idname, text=update_now_txt)
+        split.operator(FCTAddonUpdaterUpdateNow.bl_idname, text=update_now_txt)
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname,
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                        text="", icon="FILE_REFRESH")
 
     elif updater.update_ready and not updater.manual_only:
@@ -1053,11 +1053,11 @@ def update_settings_ui(self, context, element=None):
         sub_col.scale_y = 1
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterUpdateNow.bl_idname,
+        split.operator(FCTAddonUpdaterUpdateNow.bl_idname,
                        text="Update now to " + str(updater.update_version))
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname,
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                        text="", icon="FILE_REFRESH")
 
     elif updater.update_ready and updater.manual_only:
@@ -1071,21 +1071,21 @@ def update_settings_ui(self, context, element=None):
         split = sub_col.split(align=True)
         split.enabled = False
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname,
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                        text="Addon is up to date")
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname,
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                        text="", icon="FILE_REFRESH")
 
     if not updater.manual_only:
         col = row.column(align=True)
         if updater.include_branches and len(updater.include_branch_list) > 0:
             branch = updater.include_branch_list[0]
-            col.operator(AddonUpdaterUpdateTarget.bl_idname,
+            col.operator(FCTAddonUpdaterUpdateTarget.bl_idname,
                          text="Install {} / old version".format(branch))
         else:
-            col.operator(AddonUpdaterUpdateTarget.bl_idname,
+            col.operator(FCTAddonUpdaterUpdateTarget.bl_idname,
                          text="(Re)install addon version")
         last_date = "none found"
         backup_path = os.path.join(updater.stage_path, "backup")
@@ -1095,7 +1095,7 @@ def update_settings_ui(self, context, element=None):
             else:
                 last_date = updater.json["backup_date"]
         backup_text = "Restore addon backup ({})".format(last_date)
-        col.operator(AddonUpdaterRestoreBackup.bl_idname, text=backup_text)
+        col.operator(FCTAddonUpdaterRestoreBackup.bl_idname, text=backup_text)
 
     row = box.row()
     row.scale_y = 0.7
@@ -1149,30 +1149,30 @@ def update_settings_ui_condensed(self, context, element=None):
         split.scale_y = 2
         if "ssl" in updater.error_msg.lower():
             split.enabled = True
-            split.operator(AddonUpdaterInstallManually.bl_idname,
+            split.operator(FCTAddonUpdaterInstallManually.bl_idname,
                            text=updater.error)
         else:
             split.enabled = False
-            split.operator(AddonUpdaterCheckNow.bl_idname,
+            split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                            text=updater.error)
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname,
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                        text="", icon="FILE_REFRESH")
 
     elif updater.update_ready is None and not updater.async_checking:
         col.scale_y = 2
-        col.operator(AddonUpdaterCheckNow.bl_idname)
+        col.operator(FCTAddonUpdaterCheckNow.bl_idname)
     elif updater.update_ready is None:  # Async is running.
         sub_col = col.row(align=True)
         sub_col.scale_y = 1
         split = sub_col.split(align=True)
         split.enabled = False
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname, text="Checking...")
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname, text="Checking...")
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterEndBackground.bl_idname, text="", icon="X")
+        split.operator(FCTAddonUpdaterEndBackground.bl_idname, text="", icon="X")
 
     elif updater.include_branches and \
             len(updater.tags) == len(updater.include_branch_list) and not \
@@ -1183,10 +1183,10 @@ def update_settings_ui_condensed(self, context, element=None):
         split = sub_col.split(align=True)
         split.scale_y = 2
         now_txt = "Update directly to " + str(updater.include_branch_list[0])
-        split.operator(AddonUpdaterUpdateNow.bl_idname, text=now_txt)
+        split.operator(FCTAddonUpdaterUpdateNow.bl_idname, text=now_txt)
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname,
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                        text="", icon="FILE_REFRESH")
 
     elif updater.update_ready and not updater.manual_only:
@@ -1194,11 +1194,11 @@ def update_settings_ui_condensed(self, context, element=None):
         sub_col.scale_y = 1
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterUpdateNow.bl_idname,
+        split.operator(FCTAddonUpdaterUpdateNow.bl_idname,
                        text="Update now to " + str(updater.update_version))
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname,
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                        text="", icon="FILE_REFRESH")
 
     elif updater.update_ready and updater.manual_only:
@@ -1211,11 +1211,11 @@ def update_settings_ui_condensed(self, context, element=None):
         split = sub_col.split(align=True)
         split.enabled = False
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname,
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                        text="Addon is up to date")
         split = sub_col.split(align=True)
         split.scale_y = 2
-        split.operator(AddonUpdaterCheckNow.bl_idname,
+        split.operator(FCTAddonUpdaterCheckNow.bl_idname,
                        text="", icon="FILE_REFRESH")
 
     row = element.row()
@@ -1320,15 +1320,15 @@ def select_link_function(self, tag):
 # Register, should be run in the register module itself
 # -----------------------------------------------------------------------------
 classes = (
-    AddonUpdaterInstallPopup,
-    AddonUpdaterCheckNow,
-    AddonUpdaterUpdateNow,
-    AddonUpdaterUpdateTarget,
-    AddonUpdaterInstallManually,
-    AddonUpdaterUpdatedSuccessful,
-    AddonUpdaterRestoreBackup,
-    AddonUpdaterIgnore,
-    AddonUpdaterEndBackground
+    FCTAddonUpdaterInstallPopup,
+    FCTAddonUpdaterCheckNow,
+    FCTAddonUpdaterUpdateNow,
+    FCTAddonUpdaterUpdateTarget,
+    FCTAddonUpdaterInstallManually,
+    FCTAddonUpdaterUpdatedSuccessful,
+    FCTAddonUpdaterRestoreBackup,
+    FCTAddonUpdaterIgnore,
+    FCTAddonUpdaterEndBackground
 )
 
 
