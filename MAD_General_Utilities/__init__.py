@@ -19,7 +19,7 @@
 bl_info = {
     "name": "MAD General Utilities ",
     "author": "Betti",
-    "version": (2, 0, 0),
+    "version": (2, 0, 1),
     "blender": (3, 0, 0),
     "location": "Viewport > MAD General Utilities",
     "description": """In this addon: Bind/Unbind all mesh cages, Relocate Paths, Remove Broken Drivers and Refresh Drivers""",
