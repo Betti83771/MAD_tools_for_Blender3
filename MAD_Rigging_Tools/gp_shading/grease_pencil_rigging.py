@@ -320,7 +320,7 @@ class MST_UL_GPRigPropTableListUI((bpy.types.UIList)): #TODO
 class RigGpPanel(bpy.types.Panel):
     bl_label = "Grease Pencil autorig"
     bl_idname = "MST_PT_Gprig"
-    bl_space_type = 'NODE_EDITOR'
+    bl_space_type = 'VIEW_3D'
     bl_category = "MAD Rigging Tools"
     bl_region_type = 'UI'
     bl_options = {'DEFAULT_CLOSED'}
