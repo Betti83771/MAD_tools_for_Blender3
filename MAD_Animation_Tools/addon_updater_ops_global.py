@@ -226,7 +226,7 @@ class AddonUpdaterInstallPopup(bpy.types.Operator):
                     continue
                 imported_mod = importlib.import_module(mad_module + ".addon_updater_ops")
                 imported_init_bl_info = importlib.import_module(mad_module).bl_info
-                imported_mod.addon_update_register(imported_init_bl_info)
+               # imported_mod.addon_update_register(imported_init_bl_info)
                 res = updater.run_update(force=False,
                                      callback=post_update_callback,
                                      clean=self.clean_install)
@@ -327,7 +327,7 @@ class AddonUpdaterUpdateNow(bpy.types.Operator):
                         continue
                     imported_mod = importlib.import_module(mad_module + ".addon_updater_ops")
                     imported_init_bl_info = importlib.import_module(mad_module).bl_info
-                    imported_mod.addon_update_register(imported_init_bl_info)
+                  #  imported_mod.addon_update_register(imported_init_bl_info)
                     res = imported_mod.updater.run_update(force=False,
                                         callback=post_update_callback,
                                         clean=self.clean_install)
