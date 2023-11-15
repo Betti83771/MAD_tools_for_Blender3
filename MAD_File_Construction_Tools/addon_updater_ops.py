@@ -1367,7 +1367,7 @@ def addon_update_register(bl_info):
     # Addon subfolder path.
     # "sample/path/to/addon"
     # default is "" or None, meaning root
-    updater.subfolder_path = "/MAD_File_Construcion_Tools"
+    updater.subfolder_path = "MAD_File_Construcion_Tools"
 
     # Used to check/compare versions.
     updater.current_version = bl_info["version"]
