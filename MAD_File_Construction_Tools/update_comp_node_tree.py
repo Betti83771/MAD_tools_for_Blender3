@@ -193,7 +193,8 @@ classes = [
 def update_comp_node_tree_register():
     bpy.types.WindowManager.mad_file_construction_file_zero = bpy.props.StringProperty(subtype='FILE_PATH',
                         name="File zero",
-                        default=f"//..{os.sep}3D_ANM_SCE000{os.sep}3D_ANM_SCE000_CUT000.blend")
+                      #  default=f"//..{os.sep}3D_ANM_SCE000{os.sep}3D_ANM_SCE000_CUT000.blend"
+                        )
     for cls in classes:
         bpy.utils.register_class(cls)
 
