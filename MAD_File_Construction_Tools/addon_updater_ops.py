@@ -1362,12 +1362,12 @@ def addon_update_register(bl_info):
     # updater.addon = # define at top of module, MUST be done first
 
     # Website for manual addon download, optional but recommended to set.
-    updater.website = "https://github.com/Betti83771/MAD_tools_for_Blender3/tree/main/MAD_File_Construcion_Tools"
+    updater.website = "https://github.com/Betti83771/MAD_tools_for_Blender3/tree/main/MAD_File_Construction_Tools"
 
     # Addon subfolder path.
     # "sample/path/to/addon"
     # default is "" or None, meaning root
-    updater.subfolder_path = "MAD_File_Construcion_Tools"
+    updater.subfolder_path = "MAD_File_Construction_Tools"
 
     # Used to check/compare versions.
     updater.current_version = bl_info["version"]
