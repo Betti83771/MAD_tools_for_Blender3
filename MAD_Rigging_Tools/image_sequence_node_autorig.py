@@ -16,13 +16,13 @@ def get_material_from_nodetree(nodetree):
 def rig_target_check(rig_target, rig_subtarget):
     """Returns True or False whether the driver should be created"""
     if rig_target == None:
-        print("FW - Customized node autorig: chosen rig not found. Driver not created.")
+        print("MAD - Customized node autorig: chosen rig not found. Driver not created.")
         return False
     if rig_target.type != 'ARMATURE': 
-        print("FW - Customized node autorig: chosen rig is not actually a rig. Driver not created.")
+        print("MAD - Customized node autorig: chosen rig is not actually a rig. Driver not created.")
         return False
     if rig_subtarget not in rig_target.pose.bones.keys():
-        print("FW - Customized node autorig: chosen bone not found. Driver not created.")
+        print("MAD - Customized node autorig: chosen bone not found. Driver not created.")
         return False
         
     else:
@@ -187,7 +187,7 @@ def mix_shader_node_generate(material, node, rig_target, rig_subtarget):
 
 class IsoaGenerate(bpy.types.Operator):
     """does stuff"""
-    bl_idname = "fw_isoa.generate"
+    bl_idname = "mad_rigtools.generate"
     bl_label = "Generate"
     
     bl_options = {'REGISTER', 'UNDO'}
@@ -210,8 +210,8 @@ class IsoaGenerate(bpy.types.Operator):
     def execute(self, context):
         material = get_material_from_nodetree(context.space_data.edit_tree)
         active_node = context.space_data.edit_tree.nodes.active
-        rig_target = context.window_manager.fw_isoa_rigtarget
-        rig_subtarget = context.window_manager.fw_isoa_bonetarget
+        rig_target = context.window_manager.mad_isoa_rigtarget
+        rig_subtarget = context.window_manager.mad_isoa_bonetarget
         if isinstance(context.space_data.edit_tree.nodes.active, bpy.types.ShaderNodeTexImage):
             if not  context.space_data.edit_tree.nodes.active.image: return {'FINISHED'}
             image_node_generate(material,
@@ -244,7 +244,7 @@ class IsoaPanel(bpy.types.Panel):
     """Creates a Panel in the Shader Editor 
     for the usage of Customized node autorig"""
     bl_label = "Customized node autorig"
-    bl_idname = "FWISOA_PT_main"
+    bl_idname = "MADISOA_PT_main"
     bl_space_type = 'NODE_EDITOR'
     bl_category = "MAD Rigging Tools"
     bl_region_type = 'UI'
@@ -253,19 +253,23 @@ class IsoaPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         row = layout.row()
+        row.label(text="Supported nodes:")
+        row = layout.row()
+        row.label(text="Image Sequence, Hue/Saturation/Value, Mix RGB, Mix Shader")
+        row = layout.row()
         label = ""
         if context.space_data.edit_tree:
             if context.space_data.edit_tree.nodes.active:
                 label = f"Active node: {context.space_data.edit_tree.nodes.active.name}"
         row.label(text=label)
         row = layout.row()
-        row.prop(context.window_manager, 'fw_isoa_rigtarget', text='', icon='OUTLINER_OB_ARMATURE')
-        if context.window_manager.fw_isoa_rigtarget:
-            if context.window_manager.fw_isoa_rigtarget.type == 'ARMATURE':
+        row.prop(context.window_manager, 'mad_isoa_rigtarget', text='', icon='OUTLINER_OB_ARMATURE')
+        if context.window_manager.mad_isoa_rigtarget:
+            if context.window_manager.mad_isoa_rigtarget.type == 'ARMATURE':
                 row = layout.row()
-                row.prop_search(context.window_manager, "fw_isoa_bonetarget", context.window_manager.fw_isoa_rigtarget.data, "bones", text="")
+                row.prop_search(context.window_manager, "mad_isoa_bonetarget", context.window_manager.mad_isoa_rigtarget.data, "bones", text="")
         row = layout.row()
-        row.operator("fw_isoa.generate")    
+        row.operator("mad_rigtools.generate")    
 
 def bones():
     armature = bpy.context.window_manager.main_target
@@ -282,11 +286,11 @@ def bones():
 def isoa_register():
     bpy.utils.register_class(IsoaGenerate)
     bpy.utils.register_class(IsoaPanel)
-    bpy.types.WindowManager.fw_isoa_rigtarget = bpy.props.PointerProperty(type=bpy.types.Object,
+    bpy.types.WindowManager.mad_isoa_rigtarget = bpy.props.PointerProperty(type=bpy.types.Object,
                                                 name='Rig Target', 
                                                 description="rig on which create the custom property",
                                                 )
-    bpy.types.WindowManager.fw_isoa_bonetarget = bpy.props.StringProperty(default="",
+    bpy.types.WindowManager.mad_isoa_bonetarget = bpy.props.StringProperty(default="",
                                                 name='Bone Target', 
                                                 description="bone on which create the custom property")
   #  bpy.types.ShaderNodeTexImage.
@@ -294,5 +298,5 @@ def isoa_register():
 def isoa_unregister():
     bpy.utils.unregister_class(IsoaGenerate)
     bpy.utils.unregister_class(IsoaPanel)
-    del bpy.types.WindowManager.fw_isoa_rigtarget 
-    del bpy.types.WindowManager.fw_isoa_bonetarget 
+    del bpy.types.WindowManager.mad_isoa_rigtarget 
+    del bpy.types.WindowManager.mad_isoa_bonetarget 
