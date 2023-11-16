@@ -295,30 +295,37 @@ class AddonUpdaterCheckNow(bpy.types.Operator):
         parent_dir = os.path.dirname(current_dir)
         sys.path.append(parent_dir)
         update_ready = False
+   
         for mad_module in MAD_TOOLS_MODULES:
             if mad_module not in os.listdir(parent_dir):
                 continue
-            imported_mod = importlib.import_module(mad_module + ".addon_updater_ops")
+          
+            imported_mod = importlib.import_module(mad_module + ".addon_updater_ops_global")
             imported_init_bl_info = importlib.import_module(mad_module).bl_info
-            imported_mod.updater.check_for_update_now(ui_refresh)
+            imported_mod.check_for_update_nonthreaded(self, context)
+          
+
             if imported_mod.updater.update_ready:
                 update_ready = True
                 mad_module_var_keep = mad_module
+             
                 break
         
-        if update_ready:
+       # print("update_ready", update_ready)
+        #if update_ready:
             #just for button show
-            current_bl_info = bl_info
-            addon_update_unregister()
-            imported_mod_global = importlib.import_module(mad_module_var_keep + ".addon_updater_ops_global")
+          #  current_bl_info = bl_info
+          #  addon_update_unregister()
+           # imported_mod_global = importlib.import_module(mad_module_var_keep + ".addon_updater_ops_global")
             # swap 'em around!!!
-            imported_mod_global.addon_update_unregister()
-            addon_update_register(imported_init_bl_info)
-            imported_mod_global.addon_update_register(current_bl_info)
-            for attr in vars(imported_mod.updater).keys():
-                if attr == "addon": continue
-                if attr == "website": continue
-                setattr(updater, attr, getattr(imported_mod.updater, attr))
+           # imported_mod_global.addon_update_unregister()
+            #addon_update_register(imported_init_bl_info)
+          #  imported_mod_global.addon_update_register(current_bl_info)
+          #  print(updater.version_max_update)
+            #for attr in vars(imported_mod.updater).keys():
+            #    if attr == "addon": continue
+            #    if attr == "website": continue
+            #    setattr(updater, attr, getattr(imported_mod.updater, attr))
 
         return {'FINISHED'}
 
