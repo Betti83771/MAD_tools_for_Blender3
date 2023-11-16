@@ -28,6 +28,12 @@ import importlib
 
 import bpy
 from bpy.app.handlers import persistent
+bl_info = {
+    "name": "MAD Animation Tools ",
+    "version": (2, 0, 3),
+    "blender": (3, 0, 0),
+    
+}
 
 # This is the global updater to update all the MAD Tools modules with 1 click.
 # List of MAD Tools modules to update.
@@ -285,8 +291,34 @@ class AddonUpdaterCheckNow(bpy.types.Operator):
 
         # Input is an optional callback function. This function should take a
         # bool input. If true: update ready, if false: no update ready.
-        print("print1", updater.api_url)
-        updater.check_for_update_now(ui_refresh)
+        current_dir = os.path.dirname(__file__)
+        parent_dir = os.path.dirname(current_dir)
+        sys.path.append(parent_dir)
+        update_ready = False
+        for mad_module in MAD_TOOLS_MODULES:
+            if mad_module not in os.listdir(parent_dir):
+                continue
+            imported_mod = importlib.import_module(mad_module + ".addon_updater_ops")
+            imported_init_bl_info = importlib.import_module(mad_module).bl_info
+            imported_mod.updater.check_for_update_now(ui_refresh)
+            if imported_mod.updater.update_ready:
+                update_ready = True
+                mad_module_var_keep = mad_module
+                break
+        
+        if update_ready:
+            #just for button show
+            current_bl_info = bl_info
+            addon_update_unregister()
+            imported_mod_global = importlib.import_module(mad_module_var_keep + ".addon_updater_ops_global")
+            # swap 'em around!!!
+            imported_mod_global.addon_update_unregister()
+            addon_update_register(imported_init_bl_info)
+            imported_mod_global.addon_update_register(current_bl_info)
+            for attr in vars(imported_mod.updater).keys():
+                if attr == "addon": continue
+                if attr == "website": continue
+                setattr(updater, attr, getattr(imported_mod.updater, attr))
 
         return {'FINISHED'}
 
