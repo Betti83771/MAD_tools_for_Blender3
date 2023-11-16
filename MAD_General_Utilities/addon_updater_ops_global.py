@@ -1120,7 +1120,7 @@ def update_settings_ui(self, context, element=None):
         split.enabled = False
         split.scale_y = 2
         split.operator(AddonUpdaterCheckNow.bl_idname,
-                       text="Addon is up to date")
+                       text="Click the button on the right to check again -->")
         split = sub_col.split(align=True)
         split.scale_y = 2
         split.operator(AddonUpdaterCheckNow.bl_idname,
@@ -1260,7 +1260,7 @@ def update_settings_ui_condensed(self, context, element=None):
         split.enabled = False
         split.scale_y = 2
         split.operator(AddonUpdaterCheckNow.bl_idname,
-                       text="Addon is up to date")
+                       text="Click the button on the right to check again -->")
         split = sub_col.split(align=True)
         split.scale_y = 2
         split.operator(AddonUpdaterCheckNow.bl_idname,

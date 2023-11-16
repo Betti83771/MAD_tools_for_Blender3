@@ -25,6 +25,7 @@ import os
 import sys
 import traceback
 import importlib
+from time import sleep
 
 import bpy
 from bpy.app.handlers import persistent
@@ -303,7 +304,7 @@ class AddonUpdaterCheckNow(bpy.types.Operator):
             imported_mod = importlib.import_module(mad_module + ".addon_updater_ops_global")
             imported_init_bl_info = importlib.import_module(mad_module).bl_info
             imported_mod.check_for_update_nonthreaded(self, context)
-          
+            sleep(0.3)
 
             if imported_mod.updater.update_ready:
                 update_ready = True
@@ -1141,7 +1142,7 @@ def update_settings_ui(self, context, element=None):
         split.enabled = False
         split.scale_y = 2
         split.operator(AddonUpdaterCheckNow.bl_idname,
-                       text="Addon is up to date")
+                       text="Click the button on the right to check again -->")
         split = sub_col.split(align=True)
         split.scale_y = 2
         split.operator(AddonUpdaterCheckNow.bl_idname,
@@ -1281,7 +1282,7 @@ def update_settings_ui_condensed(self, context, element=None):
         split.enabled = False
         split.scale_y = 2
         split.operator(AddonUpdaterCheckNow.bl_idname,
-                       text="Addon is up to date")
+                       text="Click the button on the right to check again -->")
         split = sub_col.split(align=True)
         split.scale_y = 2
         split.operator(AddonUpdaterCheckNow.bl_idname,
