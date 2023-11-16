@@ -18,20 +18,20 @@ class NodeRigOperator(bpy.types.Operator):
         if isinstance(bpy.context.space_data, bpy.types.SpaceNodeEditor):
             node_editor = bpy.context.space_data 
             if node_editor.edit_tree:
-                return node_editor.edit_tree.nodes.active != None and context.window_manager.main_target != None
+                return node_editor.edit_tree.nodes.active != None and context.window_manager.mad_noderig_main_target != None
             else:
                 return False
         if context.object.active_material:
-            return context.object.active_material.node_tree.nodes.active != None and context.window_manager.main_target != None
+            return context.object.active_material.node_tree.nodes.active != None and context.window_manager.mad_noderig_main_target != None
         else:
             return False
 
     def execute(self, context):
         rig_node(
             get_node_input(self, bpy.context.space_data.edit_tree.nodes.active),
-            bpy.context.window_manager.main_target,
-            bone=bpy.context.window_manager.subtarget, 
-            use_index_prefix=bpy.context.window_manager.use_index_prefix
+            bpy.context.window_manager.mad_noderig_main_target,
+            bone=bpy.context.window_manager.mad_noderig_subtarget, 
+            use_index_prefix=bpy.context.window_manager.mad_noderig_use_index_prefix
         )
         return {'FINISHED'}
 
@@ -64,13 +64,14 @@ class ClearPropsOperator(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.main_target != None
+        return context.window_manager.mad_noderig_main_target != None
 
     def execute(self, context):
-        if context.window_manager.subtarget != "":
-            remove_target_properties(context.window_manager.main_target, bone=context.window_manager.subtarget)
+        if context.window_manager.mad_noderig_subtarget != "":
+            remove_target_properties(context.window_manager.mad_noderig_main_target, bone=context.window_manager.mad_noderig_subtarget)
         else:
-            remove_target_properties(context.window_manager.main_target)
+            remove_target_properties(context.window_manager.mad_noderig_main_target)
+        self.report(type={'INFO'}, message=f"Properties cleared from {context.window_manager.mad_noderig_main_target.name} - {context.window_manager.mad_noderig_subtarget}")
         return {'FINISHED'}
 
 class AddEmptyOperator(bpy.types.Operator):
@@ -89,7 +90,7 @@ class AddEmptyOperator(bpy.types.Operator):
         current_active = context.view_layer.objects.active
         bpy.ops.object.empty_add(type='PLAIN_AXES')
         context.active_object.name = 'ShaderEmpty'
-        context.window_manager.main_target = context.active_object #Objects constructed with bpy.ops.mesh.primitive_* are automatically active.
+        context.window_manager.mad_noderig_main_target = context.active_object #Objects constructed with bpy.ops.mesh.primitive_* are automatically active.
         context.view_layer.objects.active = current_active
         return {'FINISHED'}
 
@@ -114,26 +115,26 @@ class NodeRigPanel(bpy.types.Panel):
         row = layout.row()
         row.separator()
         row = layout.row()
-        row.prop(context.window_manager, 'main_target', text='')
+        row.prop(context.window_manager, 'mad_noderig_main_target', text='')
         if bones("2 argomenti", "a caso"):
             row = layout.row()
-            #row.prop(context.window_manager, 'subtarget', text='')#amma fa sta lista
-            row.prop_search(context.window_manager, "subtarget", context.window_manager.main_target.data, "bones", text="")
+            #row.prop(context.window_manager, 'mad_noderig_subtarget', text='')#amma fa sta lista
+            row.prop_search(context.window_manager, "mad_noderig_subtarget", context.window_manager.mad_noderig_main_target.data, "bones", text="")
         row = layout.row()
         row.operator("node.rig_material_nodes")
         row = layout.row()
-        row.prop(context.window_manager, 'use_index_prefix')
+        row.prop(context.window_manager, 'mad_noderig_use_index_prefix')
         row = layout.row()
-        row.prop(context.window_manager, 'use_ignore_linked_input')
+        row.prop(context.window_manager, 'mad_noderig_use_ignore_linked_input')
         row = layout.row()
-        row.prop(context.window_manager, 'use_lib_overridable_props')
+        row.prop(context.window_manager, 'mad_noderig_use_lib_overridable_props')
         row = layout.row()
         row.operator("object.noderig_empty", icon='EMPTY_AXIS')
         
         
 
 def bones(self, context):
-    armature = bpy.context.window_manager.main_target
+    armature = bpy.context.window_manager.mad_noderig_main_target
     if armature == None:
         return
     if armature.data in bpy.data.armatures.values():
@@ -150,23 +151,23 @@ def node_ui_register():
     bpy.utils.register_class(AddEmptyOperator)
     bpy.utils.register_class(ClearDriversOperator)
     bpy.utils.register_class(ClearPropsOperator)
-    bpy.types.WindowManager.main_target = bpy.props.PointerProperty(type=bpy.types.Object,
+    bpy.types.WindowManager.mad_noderig_main_target = bpy.props.PointerProperty(type=bpy.types.Object,
                                                 name='main target', 
                                                 description="object on which create the custom properties")
-    bpy.types.WindowManager.subtarget = bpy.props.StringProperty(default="",
+    bpy.types.WindowManager.mad_noderig_subtarget = bpy.props.StringProperty(default="",
                                                 name='subtarget', 
                                                 description="bone if armature")
-    bpy.types.WindowManager.use_index_prefix = bpy.props.BoolProperty(default=True,
+    bpy.types.WindowManager.mad_noderig_use_index_prefix = bpy.props.BoolProperty(default=True,
                                                 name='Use index prefix on "--"', 
                                                 description="""Check to order the properties with a number prefix using node sockets starting with "--" as separators""" )
-    bpy.types.WindowManager.use_ignore_linked_input = bpy.props.BoolProperty(default=True,
+    bpy.types.WindowManager.mad_noderig_use_ignore_linked_input = bpy.props.BoolProperty(default=True,
                                                 name='Ignore linked inputs', 
                                                 description="""Check to ignore linked node inputs and not put any drivers on them or properies about them""" )
-    bpy.types.WindowManager.use_lib_overridable_props = bpy.props.BoolProperty(default=True,
+    bpy.types.WindowManager.mad_noderig_use_lib_overridable_props = bpy.props.BoolProperty(default=True,
                                                 name='Library overridable properties', 
                                                 description="""Check to make the generated properties on target library overridable""" )
-    bpy.types.WindowManager.intlist = bpy.props.IntProperty(default=0,
-                                                name='intlist', 
+    bpy.types.WindowManager.mad_noderig_intlist = bpy.props.IntProperty(default=0,
+                                                name='mad_noderig_intlist', 
                                                 description="intprop for list")                                                        
                     
 
@@ -176,12 +177,12 @@ def node_ui_unregister():
     bpy.utils.unregister_class(AddEmptyOperator)
     bpy.utils.unregister_class(NodeRigOperator)
     bpy.utils.unregister_class(NodeRigPanel)
-    del bpy.types.WindowManager.main_target
-    del bpy.types.WindowManager.subtarget
-    del bpy.types.WindowManager.use_index_prefix
-    del bpy.types.WindowManager.use_ignore_linked_input
-    del bpy.types.WindowManager.use_lib_overridable_props
-    del bpy.types.WindowManager.intlist
+    del bpy.types.WindowManager.mad_noderig_main_target
+    del bpy.types.WindowManager.mad_noderig_subtarget
+    del bpy.types.WindowManager.mad_noderig_use_index_prefix
+    del bpy.types.WindowManager.mad_noderig_use_ignore_linked_input
+    del bpy.types.WindowManager.mad_noderig_use_lib_overridable_props
+    del bpy.types.WindowManager.mad_noderig_intlist
 
 
 if __name__ == '__main__':

@@ -15,7 +15,7 @@ def get_node_input(self, node):
         return None
     i = 0
     for input in node.inputs:
-        if bpy.context.window_manager.use_ignore_linked_input:
+        if bpy.context.window_manager.mad_noderig_use_ignore_linked_input:
             if  input.is_linked:
                 continue
         if '--' in input.name:
@@ -60,7 +60,7 @@ def rig_node(node_inputs_dict, obj, bone=None, use_index_prefix=False):
                         default= default,
                         description=prop_name
                         )
-        if bpy.context.window_manager.use_lib_overridable_props:
+        if bpy.context.window_manager.mad_noderig_use_lib_overridable_props:
             if bone:
                 pose_bones[bone].property_overridable_library_set('["{0}"]'.format(prop_name), True)
             else:
@@ -174,14 +174,14 @@ def remove_node_drivers(self, active_node:bpy.types.Node):
     return
 
 def remove_target_properties(target, bone=None):
-    """DEprecaated"""
+   
     # wipe existing properties 
     if bone:
             pose_bones = target.pose.bones
-            for prop in reversed(pose_bones[bone].keys()):
+            for prop in list(reversed(pose_bones[bone].keys())):
                 del pose_bones[bone][prop]
     else:
-        for prop in target.keys():
+        for prop in list(reversed(target.keys())):
             #print("removing", prop)
             del target[prop]
     return
