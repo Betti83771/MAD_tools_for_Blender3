@@ -29,12 +29,6 @@ from time import sleep
 
 import bpy
 from bpy.app.handlers import persistent
-bl_info = {
-    "name": "MAD Animation Tools ",
-    "version": (2, 0, 3),
-    "blender": (3, 0, 0),
-    
-}
 
 # This is the global updater to update all the MAD Tools modules with 1 click.
 # List of MAD Tools modules to update.
@@ -311,7 +305,8 @@ class AddonUpdaterCheckNow(bpy.types.Operator):
                 mad_module_var_keep = mad_module
              
                 break
-        
+        if not update_ready: 
+            updater.check_for_update_now(ui_refresh)
        # print("update_ready", update_ready)
         #if update_ready:
             #just for button show

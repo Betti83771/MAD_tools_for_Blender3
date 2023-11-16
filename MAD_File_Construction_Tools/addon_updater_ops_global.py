@@ -303,7 +303,8 @@ class AddonUpdaterCheckNow(bpy.types.Operator):
                 mad_module_var_keep = mad_module
              
                 break
-        
+        if not update_ready: 
+            updater.check_for_update_now(ui_refresh)
         return {'FINISHED'}
 
 

@@ -305,7 +305,8 @@ class AddonUpdaterCheckNow(bpy.types.Operator):
              
                 break
         
-        
+        if not update_ready: 
+            updater.check_for_update_now(ui_refresh)
         return {'FINISHED'}
 
 
