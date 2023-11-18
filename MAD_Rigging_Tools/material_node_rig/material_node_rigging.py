@@ -1,4 +1,5 @@
 import bpy
+from ..deps.operators_refresh_drivers import refresh_drivers_execute
 
 def error(self, string):
     self.report({'WARNING'}, string)
@@ -136,12 +137,7 @@ def rig_node(node_inputs_dict, obj, bone=None, use_index_prefix=False):
         
     obj.update_tag()
     
-    try:
-        bpy.ops.object.refresh_drivers.poll()
-    except AttributeError:
-        pass
-    else:
-        bpy.ops.object.refresh_drivers(selected_only=False)
+    refresh_drivers_execute(bpy.data.objects)
     
     props_to_be_deleted = []
     if bone:
