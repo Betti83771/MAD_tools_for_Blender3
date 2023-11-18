@@ -77,10 +77,7 @@ def register():
     bpy.utils.register_class(Prefs)
     bpy.utils.register_class(MADRelocatePaths)
     bpy.utils.register_class(BindAll)
-    try:
-        bpy.ops.object.refresh_drivers.poll()
-    except AttributeError:
-        refr_drvs_register()
+    refr_drvs_register()
  
     ui_register()
     
@@ -90,12 +87,7 @@ def register():
 def unregister():
     ui_unregister()
 
-    try:
-        bpy.ops.object.refresh_drivers.poll()
-    except AttributeError:
-        pass
-    else:
-        refr_drvs_unregister()
+    refr_drvs_unregister()
     bpy.utils.unregister_class(BindAll)
     bpy.utils.unregister_class(MADRelocatePaths)
     bpy.utils.unregister_class(Prefs)
