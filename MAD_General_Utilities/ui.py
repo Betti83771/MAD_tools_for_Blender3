@@ -49,7 +49,8 @@ class MadDriversInNodeEditorPanel(bpy.types.Panel):
 classes = [
     #  classes here
     MadGeneralToolsPanel,
-    MadRelocatePathPanel
+    MadRelocatePathPanel,
+    MadDriversInNodeEditorPanel
 
 ]
 
