@@ -76,10 +76,7 @@ def register():
     addon_updater_ops.addon_update_register(bl_info)
     addon_updater_ops_global.addon_update_register(bl_info)
     bpy.utils.register_class(Prefs)
-    try:
-        bpy.ops.object.refresh_drivers.poll()
-    except AttributeError:
-        refr_drvs_register()
+    
     node_ui_register()
     gpr_register()
     isoa_register()  
@@ -93,11 +90,7 @@ def unregister():
     isoa_unregister()
     gpr_unregister()
     node_ui_unregister()
-    try:
-        refr_drvs_unregister()
-    except AttributeError:
-        pass
-        
+    
     bpy.utils.unregister_class(Prefs)
     addon_updater_ops_global.addon_update_unregister()
     addon_updater_ops.addon_update_unregister()
