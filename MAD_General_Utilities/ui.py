@@ -32,6 +32,20 @@ class MadRelocatePathPanel(bpy.types.Panel):
         op.old_path = context.window_manager.mad_relocate_paths_old_path
         op.new_path = context.window_manager.mad_relocate_paths_new_path
 
+class MadDriversInNodeEditorPanel(bpy.types.Panel):
+    """Panel that appears in node editor so it can be useful with rigged nodes"""
+    bl_label = "Driver operations"
+    bl_idname = "MGU_PT_driversondeeditor"
+    bl_space_type = 'NODE_EDITOR'
+    bl_category = "MAD General Utilities"
+    bl_region_type = 'UI'
+    def draw(self, context):
+        layout = self.layout
+        row = layout.row()
+        row.operator("mad_utils.refresh_drivers")
+        row = layout.row()
+        row.operator("mad_utils.remobe_broken_drivers")
+
 classes = [
     #  classes here
     MadGeneralToolsPanel,
