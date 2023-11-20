@@ -344,7 +344,7 @@ class AddonUpdaterUpdateNow(bpy.types.Operator):
                 for mad_module in MAD_TOOLS_MODULES:
                     if mad_module not in os.listdir(parent_dir):
                         continue
-                    imported_mod = importlib.import_module(mad_module + ".addon_updater_ops")
+                    imported_mod = importlib.import_module(mad_module + ".addon_updater_ops_global")
                     imported_init_bl_info = importlib.import_module(mad_module).bl_info
                   #  imported_mod.addon_update_register(imported_init_bl_info)
                     res = imported_mod.updater.run_update(force=True,
@@ -1416,7 +1416,7 @@ def addon_update_register(bl_info):
     # Addon subfolder path.
     # "sample/path/to/addon"
     # default is "" or None, meaning root
-    updater.subfolder_path = ""
+    updater.subfolder_path = "MAD_Rigging_Tools"
 
     # Used to check/compare versions.
     updater.current_version = bl_info["version"]
