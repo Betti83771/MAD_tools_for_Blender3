@@ -1,5 +1,6 @@
 import bpy
 from mathutils import Vector
+from .deps.operators_refresh_drivers import refresh_drivers_execute
 
 """Generates a different autorig depending on the selected node, on the armature indicated on the panel.
 This autorig is specific for MAD pipeline needs.
@@ -161,7 +162,7 @@ def mix_rgb_node_generate(material, node, rig_target, rig_subtarget):
     make_driver(node.inputs[2], "default_value", rig_target, f'pose.bones["{rig_subtarget}"]["04-Tint"][2]', drv_index=2)
     rig_target.update_tag()
     material.update_tag()
-    bpy.ops.object.refresh_drivers(selected_only=False)
+    refresh_drivers_execute(bpy.data.objects)
     return
 
 #########################################
