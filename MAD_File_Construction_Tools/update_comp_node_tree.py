@@ -142,9 +142,9 @@ class MadUpdateComp(bpy.types.Operator):
         return True
 
     def execute(self, context):
-        updated_scenes = update_comp_node_tree_func(self, context.window_manager.twob_file_zero)
+        updated_scenes = update_comp_node_tree_func(self, context.window_manager.mad_file_construction_file_zero)
         if updated_scenes == "file_not_found": 
-            self.report({'ERROR'}, f"File not found: {context.window_manager.twob_file_zero}")
+            self.report({'ERROR'}, f"File not found: {context.window_manager.mad_file_construction_file_zero}")
             return {'FINISHED'}
         self.report({'INFO'}, f"Following scenes node trees updated: {updated_scenes}")
         return {'FINISHED'}
@@ -171,7 +171,7 @@ class MadCompositingPanel(bpy.types.Panel):
     """Panel for useful operations regarding file construction"""
     bl_label = "Compositing"
     bl_idname = "MFC_PT_comppanel"
-    bl_space_type = 'VIEW_3D'
+    bl_space_type = 'NODE_EDITOR'
     bl_category = "MAD File Construction Tools"
     bl_region_type = 'UI'
     def draw(self, context):
@@ -193,7 +193,7 @@ classes = [
 def update_comp_node_tree_register():
     bpy.types.WindowManager.mad_file_construction_file_zero = bpy.props.StringProperty(subtype='FILE_PATH',
                         name="File zero",
-                      #  default=f"//..{os.sep}3D_ANM_SCE000{os.sep}3D_ANM_SCE000_CUT000.blend"
+                       # default=f"//..{os.sep}3D_ANM_SCE000{os.sep}3D_ANM_SCE000_CUT000.blend"
                         )
     for cls in classes:
         bpy.utils.register_class(cls)

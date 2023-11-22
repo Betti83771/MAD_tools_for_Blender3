@@ -1,5 +1,6 @@
 # THIS MODULE BELONGS TO Kalle-Samuli Riihikoski (haikalle) https://github.com/SamuliRiihikoski
-# FOR THEIR ADDON "Node custom builder". IT WAS BORROWED BY ME FOR THE "2 Battiti" PRODUCTION.
+# FOR THEIR ADDON "Node custom builder". IT WAS BORROWED AND EDITED ACCORDINGLY BY ME (Betti)
+# FOR THE MAD FILE CONSTRUCTION TOOLS.
 
 
 # ***** BEGIN GPL LICENSE BLOCK *****
@@ -66,8 +67,8 @@ def writeExtraSettings(dict, node, type, nimi, main_mode):
 
     elif node.type == 'R_LAYERS':
         
-        settings.append([0, 'scene', bpy.data.scenes[node.scene.name]])
-        settings.append([0, 'layer', node.layer])
+        settings.append([12, 'scene', node.scene.name])
+        settings.append([13, 'layer', node.layer])
 
     elif node.type == 'RGB':
 
@@ -1325,9 +1326,18 @@ def readExtraSettings(extra_settings, node):
             node.node_tree.inputs[setting[1]].min_value = setting[3]
             node.node_tree.inputs[setting[1]].max_value = setting[4]
 
-        # layer node
+        # layer node, scene
         elif setting[0] == 12:
-            node.layer = node.scene.view_layers[setting[2]]
+            try:
+                node.scene = bpy.data.scenes[setting[2]]
+            except TypeError:
+                print(f"Update compositor node tree: Scene {setting[2]} not found")
 
+        # layer node, layer
+        elif setting[0] == 13:
+            try:
+                node.layer = setting[2]
+            except TypeError:
+                print(f"Update compositor node tree: layer {setting[2]} not found")
 
 
