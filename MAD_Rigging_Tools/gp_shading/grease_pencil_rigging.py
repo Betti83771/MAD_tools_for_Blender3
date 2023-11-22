@@ -58,7 +58,8 @@ def make_default_properties_table():
 
 def create_metarig_bone(context:bpy.types.Context, rig_obj:bpy.types.Object, bone_name="settings_GP", use_default_properties=True):
     """Add a bone in edit mode, to be included in a rigify metarig that would later generate a rig"""
-    if context.mode != 'EDIT_ARMATURE': return
+    if context.mode != 'EDIT_ARMATURE': 
+        bpy.ops.object.mode_set(mode='EDIT')
     assert rig_obj.type == 'ARMATURE'
     save_mat = None
     if bone_name in rig_obj.data.edit_bones.keys():
@@ -227,12 +228,7 @@ class CreateGPShadingMetarigBone(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if context.window_manager.mst_gprig_rigtarget:
-            
-            case_obj_but_picked = context.window_manager.mst_gprig_rigtarget.type == 'ARMATURE' and context.mode == 'OBJECT'
-            
-        else: case_obj_but_picked = False
-        return context.mode == 'EDIT_ARMATURE' or case_obj_but_picked
+        return context.mode in ('EDIT_ARMATURE', 'OBJECT')
 
     def execute(self, context):
         if context.mode == 'EDIT_ARMATURE':
@@ -241,7 +237,7 @@ class CreateGPShadingMetarigBone(bpy.types.Operator):
                                 use_default_properties=context.window_manager.mst_gpr_use_default_prop_table)
             context.window_manager.mst_gprig_subtarget = context.window_manager.mst_gprig_bone_name
             context.window_manager.mst_gprig_rigtarget = context.object
-        else:
+        elif context.window_manager.mst_gprig_rigtarget:
             context.view_layer.objects.active = context.window_manager.mst_gprig_rigtarget
             if context.window_manager.mst_gprig_subtarget in context.window_manager.mst_gprig_rigtarget.data.bones.keys():
                 bone_name = context.window_manager.mst_gprig_subtarget
@@ -251,7 +247,18 @@ class CreateGPShadingMetarigBone(bpy.types.Operator):
             create_metarig_bone(context, context.object, 
                                 bone_name=bone_name, 
                                 use_default_properties=context.window_manager.mst_gpr_use_default_prop_table)
-
+            bpy.ops.object.mode_set(mode='OBJECT')
+        else:
+            bone_name = context.window_manager.mst_gprig_bone_name
+            new_armature = bpy.data.armatures.new(bone_name + '_metarig')
+            new_rig_obj = bpy.data.objects.new(new_armature.name, new_armature)
+            context.scene.collection.objects.link(new_rig_obj)
+            context.view_layer.objects.active = new_rig_obj
+            create_metarig_bone(context, context.object, 
+                                bone_name=bone_name, 
+                                use_default_properties=context.window_manager.mst_gpr_use_default_prop_table)
+            bpy.ops.object.mode_set(mode='OBJECT')
+            new_rig_obj.select_set(True)
         return {'FINISHED'}
 
 class WritePropTableOp(bpy.types.Operator): #TODO
@@ -424,16 +431,3 @@ def gpr_register():
     bpy.utils.register_class(RigGpOperator)
     bpy.utils.register_class(RigGpPanel)
     
-    
-            
-def gpr_unregister():
-    bpy.utils.unregister_class(RigGpPanel)
-    bpy.utils.unregister_class(CreateGPShadingMetarigBone)
-    bpy.utils.unregister_class(RigGpOperator)
-    gprig_unregister_properties()
-    
-    for cl in reversed(gpr_classes): 
-        bpy.utils.unregister_class(cl)
-            
-if __name__ == "__main__":
-    gpr_register()
