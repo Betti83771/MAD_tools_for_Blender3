@@ -11,9 +11,9 @@ class OtherOperatorsPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         row = layout.row()
-        row.operator("object.refresh_drivers")
+        row.operator("mad_utils.refresh_drivers")
         row = layout.row()
-        row.operator("object.remobe_broken_drivers")
+        row.operator("maD_utils.remobe_broken_drivers")
 
 classes = [
     #  classes here
