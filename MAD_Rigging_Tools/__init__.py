@@ -19,7 +19,7 @@
 bl_info = {
     "name": "MAD Rigging Tools ",
     "author": "Betti",
-    "version": (2, 0, 6),
+    "version": (2, 0, 7),
     "blender": (3, 0, 0),
     "location": "Nodes > MAD Rigging Tools",
     "description": """In this addon: Material node autorig, image sequence &co. node autorig, grease pencil shading autorig""",
