@@ -431,3 +431,10 @@ def gpr_register():
     bpy.utils.register_class(RigGpOperator)
     bpy.utils.register_class(RigGpPanel)
     
+def gpr_unregister():
+    bpy.utils.unregister_class(RigGpPanel)
+    bpy.utils.unregister_class(RigGpOperator)
+    bpy.utils.unregister_class(CreateGPShadingMetarigBone)
+    for cl in reversed(gpr_classes): 
+        bpy.utils.unregister_class(cl)
+    gprig_unregister_properties()
