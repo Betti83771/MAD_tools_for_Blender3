@@ -19,7 +19,7 @@
 bl_info = {
     "name": "MAD Animation Tools ",
     "author": "Betti",
-    "version": (2, 0, 7),
+    "version": (2, 0, 8),
     "blender": (3, 0, 0),
     "location": "Viewport > MAD Animation Tools",
     "description": """In this addon: Transform Checker, Grease Pencil Layer Checker, Copy / Paste Custom Properties""",

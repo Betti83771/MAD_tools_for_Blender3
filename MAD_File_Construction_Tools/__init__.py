@@ -19,7 +19,7 @@
 bl_info = {
     "name": "MAD File Construction Tools ",
     "author": "Betti",
-    "version": (2, 0, 7),
+    "version": (2, 0, 8),
     "blender": (3, 0, 0),
     "location": "Viewport > MAD File Construction Tools",
     "description": """In this addon: Update Compositor Node Tree""",
